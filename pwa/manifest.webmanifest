@@ -1,0 +1,25 @@
+{
+  "name": "DrillBuilder Hockey",
+  "short_name": "DrillBuilder",
+  "description": "Dessine, classe et anime tes exercices de hockey mineur, et bâtis tes plans de pratique. Fonctionne hors ligne.",
+  "lang": "fr-CA",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#0d1218",
+  "theme_color": "#0d1218",
+  "categories": ["sports", "education", "productivity"],
+  "icons": [
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Nouvel exercice", "short_name": "Nouveau", "url": "./index.html#/editeur" },
+    { "name": "Bibliothèque", "short_name": "Exercices", "url": "./index.html#/bibliotheque" },
+    { "name": "Plans de pratique", "short_name": "Pratiques", "url": "./index.html#/plans" }
+  ]
+}

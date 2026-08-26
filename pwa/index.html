@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr-CA" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<title>DrillBuilder Hockey — exercices et plans de pratique</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Application hors ligne pour dessiner, classer et animer des exercices de hockey mineur, et bâtir des plans de pratique. Toutes les données restent sur l’appareil.">
+<meta name="theme-color" content="#0d1218">
+<meta name="color-scheme" content="dark light">
+
+<!-- Installation sur l'écran d'accueil iOS -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DrillBuilder">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<link rel="icon" href="./icons/icon-192.png" type="image/png">
+<link rel="manifest" href="./manifest.webmanifest">
+
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div id="app"></div>
+  <div id="toasts" aria-live="polite"></div>
+  <div id="printArea" class="print-only"></div>
+
+  <noscript>
+    <div style="padding:24px;font-family:system-ui;color:#f2f6fa;background:#131b24">
+      <h1>JavaScript est requis</h1>
+      <p>DrillBuilder Hockey dessine les patinoires et enregistre tes exercices directement dans le navigateur.
+         Active JavaScript pour utiliser l’application.</p>
+    </div>
+  </noscript>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

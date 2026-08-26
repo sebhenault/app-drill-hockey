@@ -1,0 +1,54 @@
+# Publie le dossier pwa/ sur GitHub Pages.
+# À activer une fois dans Settings → Pages → Source : GitHub Actions.
+name: Déployer la PWA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'pwa/**'
+      - '.github/workflows/deploy-pwa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Vérifier la syntaxe des modules
+        run: |
+          for f in pwa/js/*.js pwa/sw.js; do
+            node --check "$f" || exit 1
+          done
+          node -e "JSON.parse(require('fs').readFileSync('pwa/manifest.webmanifest','utf8'))"
+          echo "Tous les modules et le manifeste sont valides."
+
+      - name: Construire la version mono-fichier
+        run: |
+          node tools/build-single.mjs
+          cp dist/drillbuilder-hockey.html pwa/drillbuilder-hockey.html
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: pwa
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
