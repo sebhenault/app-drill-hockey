@@ -12,7 +12,8 @@ Interface en français canadien. Architecture prête pour l’anglais.
 
 | | |
 |---|---|
-| **Éditeur** | 9 surfaces de glace, 19 objets, 12 styles de trajectoire, 6 extrémités de ligne, sélection multiple, rotation, échelle, calques, verrouillage, grille et aimantation, annuler/refaire, copier/coller, symétries, zoom et déplacement, crayon libre |
+| **Éditeur** | 9 surfaces de glace, 19 objets, 13 styles de trajectoire, 6 extrémités de ligne, sélection multiple, rotation, échelle, calques, verrouillage, grille et aimantation, annuler/refaire, copier/coller, symétries, zoom et déplacement, crayon libre |
+| **Symboles** | Légende Hockey Canada / Hockey Québec : cercle ouvert à l’offensive, triangle ouvert à la défensive, F / D / C / W / G, C entouré pour l’entraîneur, disque plein, triangle plein pour un cône ; patinage avant, avec rondelle, arrière, arrière avec rondelle, passe, tir, pivot, arrêt à deux pieds. Les ajouts de l’application sont marqués « complément » dans le guide |
 | **Séquences** | Plusieurs séquences par exercice, durée réglable, ligne du temps, lecture, pause, retour au début, vitesse 0,5× à 2×, objets qui suivent leur trajectoire |
 | **Bibliothèque** | 22 exercices de démonstration originaux, recherche plein texte, filtres combinables (âge, habileté, situation, espace, durée, difficulté, gardien, vidéo, favoris, mes exercices), vues grille et liste |
 | **Fiche** | 30 champs (objectifs, mise en place, déroulement, points d’enseignement, erreurs fréquentes, variantes, sécurité, mots-clés, source, vidéo…) |
@@ -155,9 +156,15 @@ Les exemples n’emploient jamais de nom de joueur : uniquement des étiquettes
 
 ## Contenu et droits
 
-Les 22 exercices de démonstration, tous les diagrammes et tous les symboles ont
-été créés pour cette application. Aucun texte, diagramme, image ou vidéo n’est
-repris d’un site tiers.
+Les 22 exercices de démonstration et tous les diagrammes ont été créés pour cette
+application. Aucun texte, diagramme, image ou vidéo n’est repris d’un site tiers.
+
+Les **symboles** suivent la légende conventionnelle de Hockey Canada et Hockey
+Québec. C’est une convention de notation, pas une œuvre : s’en écarter rendrait les
+diagrammes illisibles pour les autres entraîneurs. Chaque tracé SVG est néanmoins
+dessiné par l’application — aucun fichier n’est repris. Le guide des symboles
+distingue les entrées de la légende officielle des compléments propres à
+DrillBuilder.
 
 Hockey Canada, Hockey Québec, HockeyShare, Ice Hockey Systems et Loz Hockey sont
 cités uniquement comme **liens externes de consultation**, avec la mention

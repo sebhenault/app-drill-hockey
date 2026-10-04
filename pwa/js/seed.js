@@ -253,7 +253,7 @@ export function seedDrills() {
     surface: 'zone-def', source: SRC.own,
     sequences: [
       seq('Slalom', 4, 'Deux touches entre chaque cône.', [
-        o('net', 110, 425, { color: DARK }), o('goalie', 185, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 185, 425, { color: BLUE, label: 'G' }),
         o('cone', 640, 425, { color: ORANGE }), o('cone', 560, 330, { color: ORANGE }),
         o('cone', 480, 425, { color: ORANGE }), o('cone', 400, 330, { color: ORANGE }),
         o('cone', 320, 425, { color: ORANGE }),
@@ -263,7 +263,7 @@ export function seedDrills() {
           { x: 440, y: 380 }, { x: 360, y: 470 }, { x: 300, y: 425 }]),
       ]),
       seq('Accélération et tir', 4, 'Trois poussées puis tir du haut du cercle.', [
-        o('net', 110, 425, { color: DARK }), o('goalie', 185, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 185, 425, { color: BLUE, label: 'G' }),
         o('cone', 320, 425, { color: ORANGE }),
         o('player', 300, 425, { label: 'F1' }),
         p('skate', [{ x: 300, y: 425 }, { x: 270, y: 340 }, { x: 265, y: 265 }], { color: RED }),
@@ -393,20 +393,17 @@ export function seedDrills() {
     surface: 'zone-def',
     sequences: [
       seq('Croisements avant', 5, 'Sens antihoraire, quatre croisements par demi-cercle.', [
-        o('net', 110, 425, { color: DARK }),
         o('player', 310, 425, { label: 'F1' }),
         p('crossover', [{ x: 340, y: 400 }, { x: 430, y: 260 }, { x: 310, y: 90 },
           { x: 190, y: 220 }, { x: 300, y: 380 }], { color: BLUE }),
         o('text', 560, 425, { text: 'Cercle du haut', fontSize: 32 }),
       ]),
       seq('Traversée et second cercle', 5, 'Changement de sens au centre.', [
-        o('net', 110, 425, { color: DARK }),
         o('player', 310, 425, { label: 'F1' }),
         p('crossover', [{ x: 310, y: 460 }, { x: 430, y: 590 }, { x: 310, y: 760 },
           { x: 190, y: 620 }, { x: 300, y: 470 }], { color: BLUE }),
       ]),
       seq('Croisements arrière', 5, 'Mêmes trajectoires, en marche arrière.', [
-        o('net', 110, 425, { color: DARK }),
         o('player', 310, 425, { label: 'F1' }),
         p('backward', [{ x: 340, y: 400 }, { x: 430, y: 260 }, { x: 310, y: 90 },
           { x: 190, y: 220 }, { x: 300, y: 380 }], { color: RED }),
@@ -444,20 +441,17 @@ export function seedDrills() {
     videos: [extVideo(SRC.hq, 'Documents techniques Hockey Québec (site externe)')],
     sequences: [
       seq('Avant puis pivot', 4, 'Pivot vers l’intérieur au premier cône.', [
-        o('net', 110, 425, { color: DARK }),
         o('cone', 310, 205, { color: ORANGE }), o('cone', 310, 645, { color: ORANGE }),
         o('cone', 700, 425, { color: ORANGE }),
         o('defence', 150, 645, { label: 'D1', color: BLUE }),
         p('skate', [{ x: 190, y: 640 }, { x: 260, y: 560 }, { x: 300, y: 470 }], { endCap: 'pivot' }),
       ]),
       seq('Arrière', 4, 'Marche arrière jusqu’au cône opposé.', [
-        o('net', 110, 425, { color: DARK }),
         o('cone', 310, 205, { color: ORANGE }), o('cone', 700, 425, { color: ORANGE }),
         o('defence', 310, 425, { label: 'D1', color: BLUE }),
         p('backward', [{ x: 340, y: 400 }, { x: 400, y: 300 }, { x: 330, y: 230 }], { color: RED, endCap: 'pivot' }),
       ]),
       seq('Retour avant', 4, 'Pivot inverse et accélération vers la ligne bleue.', [
-        o('net', 110, 425, { color: DARK }),
         o('cone', 700, 425, { color: ORANGE }),
         o('defence', 310, 205, { label: 'D1', color: BLUE }),
         p('skate', [{ x: 350, y: 220 }, { x: 520, y: 300 }, { x: 670, y: 410 }], { color: GREEN }),
@@ -494,13 +488,13 @@ export function seedDrills() {
     videos: [extVideo(SRC.ihs, 'Exercices de tir — Ice Hockey Systems (site externe)')],
     sequences: [
       seq('Mise en place', 3, 'Passeur dans le coin, tireur au haut du cercle.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
         o('player', 1900, 720, { label: 'F2' }), o('pucks', 1940, 760),
         o('player', 1690, 100, { label: 'F1', color: RED }),
         o('player', 1810, 540, { label: 'F3', color: GREEN }),
       ]),
       seq('Passe et tir', 3, 'Tir en une touche, bas et au but.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
         o('player', 1850, 690, { label: 'F2' }),
         o('player', 1690, 205, { label: 'F1', color: RED }),
         o('player', 1790, 500, { label: 'F3', color: GREEN }),
@@ -509,7 +503,7 @@ export function seedDrills() {
         p('shot', [{ x: 1700, y: 230 }, { x: 1800, y: 350 }, { x: 1862, y: 405 }], { color: RED }),
       ]),
       seq('Reprise', 3, 'Le joueur de présence joue le retour.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
         o('player', 1770, 470, { label: 'F3', color: GREEN }), o('puck', 1800, 450),
         p('shot', [{ x: 1800, y: 450 }, { x: 1855, y: 430 }], { color: GREEN }),
         o('text', 1560, 690, { text: 'Bâton sur la glace,\npalette ouverte', fontSize: 32 }),
@@ -544,7 +538,7 @@ export function seedDrills() {
     surface: 'zone-off', source: SRC.own,
     sequences: [
       seq('Départ', 3, 'Rondelle lancée dans le coin.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
         o('player', 1930, 330, { label: 'F1', color: RED }),
         o('opponent', 1930, 520, { label: 'X1', color: DARK }),
         o('coach', 1660, 425, { color: GREEN }),
@@ -553,14 +547,14 @@ export function seedDrills() {
         p('skate', [{ x: 1930, y: 490 }, { x: 1960, y: 300 }, { x: 1930, y: 180 }], { color: DARK }),
       ]),
       seq('Duel', 4, 'Protéger, puis attaquer l’intérieur.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
         o('player', 1900, 150, { label: 'F1', color: RED }), o('puck', 1935, 175),
         o('opponent', 1830, 175, { label: 'X1', color: DARK }),
         p('check', [{ x: 1800, y: 190 }, { x: 1860, y: 170 }], { color: DARK }),
         p('puck-carry', [{ x: 1930, y: 200 }, { x: 1880, y: 300 }, { x: 1800, y: 350 }], { color: RED }),
       ]),
       seq('Conclusion', 3, 'Tir de l’enclave ou dégagement du défenseur.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
         o('player', 1780, 350, { label: 'F1', color: RED }),
         o('opponent', 1810, 300, { label: 'X1', color: DARK }),
         p('shot', [{ x: 1790, y: 370 }, { x: 1855, y: 410 }], { color: RED }),
@@ -598,7 +592,7 @@ export function seedDrills() {
     videos: [extVideo(SRC.hs, 'Bibliothèque HockeyShare (site externe)')],
     sequences: [
       seq('Montée', 4, 'Largeur maintenue jusqu’à la ligne bleue.', [
-        o('net', 110, 425, { color: DARK }), o('goalie', 185, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 185, 425, { color: BLUE, label: 'G' }),
         o('player', 960, 200, { label: 'F1', color: RED }), o('puck', 990, 225),
         o('player', 960, 660, { label: 'F2', color: RED }),
         o('defence', 800, 425, { label: 'D1', color: DARK }),
@@ -607,7 +601,7 @@ export function seedDrills() {
         p('backward', [{ x: 780, y: 425 }, { x: 700, y: 425 }, { x: 620, y: 425 }], { color: DARK }),
       ]),
       seq('Entrée de zone', 4, 'Le défenseur garde la ligne de passe.', [
-        o('net', 110, 425, { color: DARK }), o('goalie', 185, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 185, 425, { color: BLUE, label: 'G' }),
         o('player', 620, 210, { label: 'F1', color: RED }), o('puck', 650, 235),
         o('player', 620, 640, { label: 'F2', color: RED }),
         o('defence', 480, 420, { label: 'D1', color: DARK }),
@@ -616,7 +610,7 @@ export function seedDrills() {
         p('backward', [{ x: 460, y: 420 }, { x: 370, y: 420 }], { color: DARK }),
       ]),
       seq('Conclusion', 4, 'Tir ou passe au poteau éloigné.', [
-        o('net', 110, 425, { color: DARK }), o('goalie', 185, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 185, 425, { color: BLUE, label: 'G' }),
         o('player', 340, 285, { label: 'F1', color: RED }),
         o('player', 280, 560, { label: 'F2', color: RED }),
         o('defence', 300, 425, { label: 'D1', color: DARK }),
@@ -656,7 +650,7 @@ export function seedDrills() {
     videos: [extVideo(SRC.loz, 'Exercices Loz Hockey (site externe)')],
     sequences: [
       seq('Récupération', 4, 'D1 lit la pression avant de toucher la rondelle.', [
-        o('net', 110, 425, { color: DARK }), o('goalie', 185, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 185, 425, { color: BLUE, label: 'G' }),
         o('defence', 60, 340, { label: 'D1', color: BLUE }), o('puck', 90, 320),
         o('defence', 60, 560, { label: 'D2', color: BLUE }),
         o('player', 330, 90, { label: 'A1', color: GREEN }),
@@ -667,7 +661,7 @@ export function seedDrills() {
         p('skate', [{ x: 60, y: 380 }, { x: 60, y: 500 }], { color: BLUE }),
       ]),
       seq('Premier appui', 4, 'Passe à l’ailier posté à la bande.', [
-        o('net', 110, 425, { color: DARK }), o('goalie', 185, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 185, 425, { color: BLUE, label: 'G' }),
         o('defence', 90, 560, { label: 'D1', color: BLUE }), o('puck', 120, 585),
         o('defence', 150, 300, { label: 'D2', color: BLUE }),
         o('player', 330, 780, { label: 'A2', color: GREEN }),
@@ -677,7 +671,7 @@ export function seedDrills() {
         p('pass', [{ x: 140, y: 600 }, { x: 240, y: 720 }, { x: 310, y: 770 }], { color: BLUE }),
       ]),
       seq('Sortie à cinq', 5, 'Largeur maintenue à la ligne bleue.', [
-        o('net', 110, 425, { color: DARK }), o('goalie', 185, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 185, 425, { color: BLUE, label: 'G' }),
         o('player', 600, 780, { label: 'A2', color: GREEN }), o('puck', 630, 755),
         o('center', 620, 480, { label: 'C', color: GREEN }),
         o('player', 620, 90, { label: 'A1', color: GREEN }),
@@ -772,21 +766,21 @@ export function seedDrills() {
     surface: 'half',
     sequences: [
       seq('Départ', 4, 'Le défenseur pivote dès le départ de l’attaquant.', [
-        o('net', 110, 425, { color: DARK }), o('goalie', 185, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 185, 425, { color: BLUE, label: 'G' }),
         o('player', 980, 300, { label: 'F1', color: RED }), o('puck', 950, 325),
         o('defence', 620, 380, { label: 'D1', color: BLUE }),
         p('puck-carry', [{ x: 950, y: 320 }, { x: 830, y: 330 }, { x: 760, y: 340 }], { color: RED }),
         p('backward', [{ x: 620, y: 380 }, { x: 560, y: 375 }], { color: BLUE }),
       ]),
       seq('Écart maintenu', 4, 'Une longueur de bâton, épaule intérieure alignée.', [
-        o('net', 110, 425, { color: DARK }), o('goalie', 185, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 185, 425, { color: BLUE, label: 'G' }),
         o('player', 620, 330, { label: 'F1', color: RED }), o('puck', 590, 350),
         o('defence', 470, 350, { label: 'D1', color: BLUE }),
         p('handoff', [{ x: 590, y: 345 }, { x: 500, y: 348 }], { color: GREEN, endCap: 'tee' }),
         o('text', 720, 620, { text: 'Écart ≈ une longueur de bâton', fontSize: 34, color: GREEN }),
       ]),
       seq('Fermeture', 4, 'Attaquer la rondelle quand elle quitte la palette.', [
-        o('net', 110, 425, { color: DARK }), o('goalie', 185, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 185, 425, { color: BLUE, label: 'G' }),
         o('player', 430, 250, { label: 'F1', color: RED }),
         o('defence', 370, 320, { label: 'D1', color: BLUE }),
         p('check', [{ x: 370, y: 310 }, { x: 415, y: 265 }], { color: BLUE }),
@@ -875,7 +869,7 @@ export function seedDrills() {
     surface: 'zone-off',
     sequences: [
       seq('Lancer et poursuite', 3, 'F1 attaque la rondelle, F2 et F3 se positionnent.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
         o('player', 1330, 200, { label: 'F1', color: RED }),
         o('player', 1330, 425, { label: 'F2', color: GREEN }),
         o('player', 1330, 650, { label: 'F3', color: ORANGE }),
@@ -885,7 +879,7 @@ export function seedDrills() {
         p('skate', [{ x: 1370, y: 640 }, { x: 1550, y: 560 }, { x: 1690, y: 480 }], { color: ORANGE }),
       ]),
       seq('Protection et appui', 4, 'F1 protège, F2 est disponible bas.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
         o('player', 1910, 150, { label: 'F1', color: RED }), o('puck', 1940, 175),
         o('opponent', 1830, 190, { label: 'X1', color: DARK }),
         o('player', 1880, 660, { label: 'F2', color: GREEN }),
@@ -893,7 +887,7 @@ export function seedDrills() {
         p('pass', [{ x: 1930, y: 190 }, { x: 1960, y: 430 }, { x: 1900, y: 630 }], { color: RED }),
       ]),
       seq('Passe vers l’enclave', 4, 'F2 remet à F3 au haut de l’enclave.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
         o('player', 1880, 660, { label: 'F2', color: GREEN }), o('puck', 1850, 640),
         o('player', 1710, 460, { label: 'F3', color: ORANGE }),
         o('player', 1830, 300, { label: 'F1', color: RED }),
@@ -931,8 +925,8 @@ export function seedDrills() {
     videos: [extVideo(SRC.hc, 'Carrefour des exercices Hockey Canada (site externe)')],
     sequences: [
       seq('Première vague', 4, 'Trois attaquants, deux défenseurs.', [
-        o('net', 110, 425, { color: DARK }), o('goalie', 185, 425, { color: BLUE, label: 'G1' }),
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G2' }),
+        o('goalie', 185, 425, { color: BLUE, label: 'G1' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G2' }),
         o('player', 1050, 150, { label: 'F1', color: RED }), o('puck', 1020, 175),
         o('center', 1050, 425, { label: 'F2', color: RED }),
         o('player', 1050, 700, { label: 'F3', color: RED }),
@@ -945,7 +939,7 @@ export function seedDrills() {
         p('backward', [{ x: 680, y: 560 }, { x: 590, y: 550 }], { color: DARK }),
       ]),
       seq('Conclusion offensive', 4, 'Tir ou passe latérale dans l’enclave.', [
-        o('net', 110, 425, { color: DARK }), o('goalie', 185, 425, { color: BLUE, label: 'G1' }),
+        o('goalie', 185, 425, { color: BLUE, label: 'G1' }),
         o('player', 400, 230, { label: 'F1', color: RED }),
         o('center', 330, 470, { label: 'F2', color: RED }),
         o('player', 420, 660, { label: 'F3', color: RED }),
@@ -955,8 +949,8 @@ export function seedDrills() {
         p('shot', [{ x: 330, y: 470 }, { x: 200, y: 440 }, { x: 158, y: 430 }], { color: RED }),
       ]),
       seq('Transition inverse', 5, 'Les défenseurs deviennent la vague suivante.', [
-        o('net', 110, 425, { color: DARK }), o('goalie', 185, 425, { color: BLUE, label: 'G1' }),
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G2' }),
+        o('goalie', 185, 425, { color: BLUE, label: 'G1' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G2' }),
         o('defence', 300, 300, { label: 'D1', color: DARK }), o('puck', 330, 325),
         o('defence', 320, 600, { label: 'D2', color: DARK }),
         o('player', 990, 425, { label: 'F4', color: GREEN }),
@@ -994,7 +988,7 @@ export function seedDrills() {
     surface: 'zone-off', source: SRC.own,
     sequences: [
       seq('Remontée de bande', 4, 'F1 protège et remonte.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
         o('player', 1930, 180, { label: 'F1', color: RED }), o('puck', 1955, 205),
         o('player', 1800, 130, { label: 'F2', color: GREEN }),
         o('player', 1700, 470, { label: 'F3', color: ORANGE }),
@@ -1002,7 +996,7 @@ export function seedDrills() {
         p('puck-carry', [{ x: 1930, y: 200 }, { x: 1890, y: 140 }, { x: 1840, y: 120 }], { color: RED }),
       ]),
       seq('Rotation', 4, 'Le passeur remplace le receveur.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
         o('player', 1750, 120, { label: 'F2', color: GREEN }), o('puck', 1780, 145),
         o('player', 1860, 200, { label: 'F1', color: RED }),
         o('player', 1780, 480, { label: 'F3', color: ORANGE }),
@@ -1011,7 +1005,7 @@ export function seedDrills() {
         p('skate', [{ x: 1860, y: 230 }, { x: 1830, y: 330 }, { x: 1790, y: 440 }], { color: RED }),
       ]),
       seq('Tir avec écran', 4, 'Tir de la pointe, écran au haut du cercle.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
         o('defence', 1350, 300, { label: 'D1', color: BLUE }), o('puck', 1380, 320),
         o('player', 1720, 400, { label: 'F1', color: RED }),
         o('player', 1690, 200, { label: 'F2', color: GREEN }),
@@ -1049,7 +1043,7 @@ export function seedDrills() {
     surface: 'zone-def',
     sequences: [
       seq('Boîte en place', 4, 'Quatre joueurs, deux hauts et deux bas.', [
-        o('net', 110, 425, { color: DARK }), o('goalie', 185, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 185, 425, { color: BLUE, label: 'G' }),
         o('player', 380, 300, { label: 'D1', color: BLUE }), o('player', 380, 560, { label: 'D2', color: BLUE }),
         o('player', 230, 320, { label: 'A1', color: BLUE }), o('player', 230, 540, { label: 'A2', color: BLUE }),
         o('opponent', 700, 300, { label: 'X1', color: RED }), o('opponent', 700, 560, { label: 'X2', color: RED }),
@@ -1058,7 +1052,7 @@ export function seedDrills() {
         o('puck', 730, 320),
       ]),
       seq('Déplacement latéral', 4, 'Deux pas en bloc au changement de côté.', [
-        o('net', 110, 425, { color: DARK }), o('goalie', 185, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 185, 425, { color: BLUE, label: 'G' }),
         o('player', 400, 380, { label: 'D1', color: BLUE }), o('player', 400, 620, { label: 'D2', color: BLUE }),
         o('player', 250, 400, { label: 'A1', color: BLUE }), o('player', 250, 610, { label: 'A2', color: BLUE }),
         o('opponent', 700, 560, { label: 'X2', color: RED }), o('puck', 730, 585),
@@ -1067,7 +1061,7 @@ export function seedDrills() {
         p('lateral', [{ x: 230, y: 320 }, { x: 245, y: 390 }], { color: BLUE }),
       ]),
       seq('Pression et dégagement', 4, 'Pression sur rondelle immobile, dégagement par la bande.', [
-        o('net', 110, 425, { color: DARK }), o('goalie', 185, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 185, 425, { color: BLUE, label: 'G' }),
         o('player', 600, 620, { label: 'D2', color: BLUE }),
         o('player', 380, 460, { label: 'D1', color: BLUE }),
         o('player', 260, 480, { label: 'A1', color: BLUE }), o('player', 250, 640, { label: 'A2', color: BLUE }),
@@ -1108,7 +1102,7 @@ export function seedDrills() {
     videos: [extVideo(SRC.ihs, 'Systèmes d’avantage numérique — Ice Hockey Systems (site externe)')],
     sequences: [
       seq('Installation', 4, 'Un à la pointe, trois en travers, un devant.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
         o('defence', 1310, 425, { label: 'D1', color: RED }), o('puck', 1340, 450),
         o('player', 1620, 130, { label: 'F1', color: RED }),
         o('center', 1650, 425, { label: 'F2', color: RED }),
@@ -1118,7 +1112,7 @@ export function seedDrills() {
         o('opponent', 1700, 320, { label: 'X3', color: BLUE }), o('opponent', 1700, 540, { label: 'X4', color: BLUE }),
       ]),
       seq('Option demi-mur', 4, 'Remise au demi-mur pour un tir sur réception.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
         o('defence', 1320, 425, { label: 'D1', color: RED }),
         o('player', 1620, 130, { label: 'F1', color: RED }),
         o('center', 1650, 425, { label: 'F2', color: RED }),
@@ -1127,7 +1121,7 @@ export function seedDrills() {
         p('shot', [{ x: 1630, y: 160 }, { x: 1780, y: 330 }, { x: 1858, y: 400 }], { color: RED }),
       ]),
       seq('Passe royale', 4, 'Passe transversale vers le joueur du centre.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G' }),
         o('player', 1620, 130, { label: 'F1', color: RED }), o('puck', 1650, 155),
         o('player', 1620, 720, { label: 'F3', color: RED }),
         o('center', 1660, 425, { label: 'F2', color: RED }),
@@ -1166,8 +1160,8 @@ export function seedDrills() {
     surface: 'full', source: SRC.own,
     sequences: [
       seq('Patinage libre', 4, 'Changements de direction au sifflet.', [
-        o('net', 110, 425, { color: DARK }), o('goalie', 185, 425, { color: BLUE, label: 'G1' }),
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G2' }),
+        o('goalie', 185, 425, { color: BLUE, label: 'G1' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G2' }),
         o('player', 400, 200, { label: '1' }), o('player', 700, 600, { label: '2' }),
         o('player', 1200, 250, { label: '3' }), o('player', 1500, 620, { label: '4' }),
         p('skate', [{ x: 440, y: 200 }, { x: 650, y: 120 }, { x: 900, y: 250 }], { color: BLUE }),
@@ -1186,7 +1180,7 @@ export function seedDrills() {
         o('player', 1615, 90, { label: '7' }), o('player', 1615, 320, { label: '8' }),
       ]),
       seq('Tirs progressifs', 4, 'Puissance croissante, tirs bas au départ.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1820, 425, { color: BLUE, label: 'G2' }),
+        o('goalie', 1820, 425, { color: BLUE, label: 'G2' }),
         o('player', 1600, 260, { label: '1' }), o('player', 1600, 590, { label: '2' }),
         o('pucks', 1450, 425),
         p('shot', [{ x: 1620, y: 270 }, { x: 1780, y: 370 }, { x: 1855, y: 410 }], { color: RED }),
@@ -1224,7 +1218,7 @@ export function seedDrills() {
     videos: [extVideo(SRC.hq, 'Documents pour le développement des gardiens (site externe)')],
     sequences: [
       seq('Circulation', 4, 'Le gardien suit chaque passe.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1830, 425, { color: BLUE, label: 'G' }),
+        o('goalie', 1830, 425, { color: BLUE, label: 'G' }),
         o('player', 1690, 150, { label: 'P1', color: RED }), o('puck', 1715, 175),
         o('player', 1620, 425, { label: 'P2', color: RED }),
         o('player', 1690, 700, { label: 'P3', color: RED }),
@@ -1232,14 +1226,14 @@ export function seedDrills() {
         p('lateral', [{ x: 1830, y: 380 }, { x: 1835, y: 425 }], { color: BLUE }),
       ]),
       seq('Déplacement latéral', 4, 'Poussée en T sur les longs déplacements.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1835, 480, { color: BLUE, label: 'G' }),
+        o('goalie', 1835, 480, { color: BLUE, label: 'G' }),
         o('player', 1620, 425, { label: 'P2', color: RED }), o('puck', 1650, 450),
         o('player', 1690, 700, { label: 'P3', color: RED }),
         p('pass', [{ x: 1645, y: 455 }, { x: 1670, y: 620 }, { x: 1680, y: 675 }], { color: RED }),
         p('lateral', [{ x: 1835, y: 430 }, { x: 1838, y: 520 }], { color: BLUE }),
       ]),
       seq('Tir imprévisible', 3, 'Arriver arrêté avant le tir.', [
-        o('net', 1890, 425, { color: DARK }), o('goalie', 1840, 520, { color: BLUE, label: 'G' }),
+        o('goalie', 1840, 520, { color: BLUE, label: 'G' }),
         o('player', 1690, 700, { label: 'P3', color: RED }),
         p('shot', [{ x: 1700, y: 680 }, { x: 1820, y: 560 }, { x: 1860, y: 490 }], { color: RED }),
         o('text', 1520, 200, { text: 'Retour contrôlé\nvers le coin', fontSize: 32 }),

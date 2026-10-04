@@ -22,159 +22,160 @@ const escText = (s) => String(s == null ? '' : s)
    Objets
    -------------------------------------------------------------------------- */
 
-/** Texte centré à l'intérieur d'un symbole. */
-function inner(txt, size = 34, fill = '#fff') {
+/**
+ * Taille de police adaptée à la longueur de l'étiquette.
+ * « G » doit remplir le symbole, « D1 » tient encore, « F12 » ne doit pas
+ * déborder du cercle ni du triangle.
+ */
+function fitSize(txt, base) {
+  const n = String(txt || '').length;
+  if (n <= 1) return base;
+  if (n === 2) return base * 0.72;
+  if (n === 3) return base * 0.55;
+  return base * 0.45;
+}
+
+/** Texte centré dans un symbole. Le halo blanc garde la lisibilité sur la glace. */
+function inner(txt, size = 34, fill = '#12212e') {
   if (!txt) return '';
   return `<text x="0" y="0" fill="${fill}" font-size="${size}" font-weight="700"
     font-family="var(--ff)" text-anchor="middle" dominant-baseline="central"
-    style="paint-order:stroke" >${escText(txt)}</text>`;
+    paint-order="stroke" stroke="rgba(255,255,255,.9)" stroke-width="${size * 0.16}"
+    >${escText(txt)}</text>`;
 }
 
+/** Remplissage très clair sous les symboles ouverts : ils restent lisibles
+ *  quand ils tombent sur une ligne bleue ou un cercle de mise au jeu. */
+const VEIL = 'rgba(255,255,255,.78)';
+
 /**
- * Chaque entrée : { id, fr, tip, cat, draw(o) -> markup, defaults }
+ * Chaque entrée : { fr, tip, cat, official, draw(o) -> balisage }
  * cat ∈ 'players' | 'equipment' | 'text'
+ * official : true si le symbole figure dans la légende Hockey Canada /
+ * Hockey Québec ; false pour les compléments ajoutés par l'application.
  */
 export const OBJECTS = {
   player: {
-    fr: 'Joueur', tip: 'Joueur de l’équipe — cercle plein',
-    cat: 'players', defLabel: 'F1',
-    draw: (o) => `<circle r="${R}" fill="${o.color}" stroke="#fff" stroke-width="6"/>
-      ${inner(o.label)}`,
+    fr: 'Joueur à l’offensive', tip: 'Joueur à l’offensive — cercle ouvert',
+    cat: 'players', defLabel: '', official: true,
+    draw: (o) => `<circle r="${R}" fill="${VEIL}" stroke="${o.color}" stroke-width="8"/>
+      ${inner(o.label, fitSize(o.label, R * 1.05), o.color)}`,
   },
   opponent: {
-    fr: 'Joueur adverse', tip: 'Joueur adverse — carré plein (forme distincte du coéquipier)',
-    cat: 'players', defLabel: 'X',
-    draw: (o) => `<rect x="${-R * 0.86}" y="${-R * 0.86}" width="${R * 1.72}" height="${R * 1.72}"
-        rx="6" fill="${o.color}" stroke="#fff" stroke-width="6"/>${inner(o.label)}`,
+    fr: 'Joueur à la défensive', tip: 'Joueur à la défensive — triangle ouvert',
+    cat: 'players', defLabel: '', official: true,
+    draw: (o) => `<path d="M 0 ${-R * 1.12} L ${R * 1.02} ${R * 0.68} L ${-R * 1.02} ${R * 0.68} Z"
+        fill="${VEIL}" stroke="${o.color}" stroke-width="8" stroke-linejoin="round"/>
+      <g transform="translate(0,${R * 0.3})">${inner(o.label, fitSize(o.label, R * 0.86), o.color)}</g>`,
   },
   forward: {
-    fr: 'Attaquant', tip: 'Attaquant — triangle pointe vers l’avant',
-    cat: 'players', defLabel: 'F',
-    draw: (o) => `<path d="M 0 ${-R * 1.05} L ${R} ${R * 0.72} L ${-R} ${R * 0.72} Z"
-        fill="${o.color}" stroke="#fff" stroke-width="6" stroke-linejoin="round"/>
-      <g transform="translate(0,10)">${inner(o.label, 28)}</g>`,
+    fr: 'Avant (F)', tip: 'Avant — lettre F',
+    cat: 'players', defLabel: 'F', official: true,
+    draw: (o) => inner(o.label || 'F', fitSize(o.label || 'F', R * 1.5), o.color),
   },
   defence: {
-    fr: 'Défenseur', tip: 'Défenseur — losange',
-    cat: 'players', defLabel: 'D',
-    draw: (o) => `<path d="M 0 ${-R * 1.05} L ${R * 1.05} 0 L 0 ${R * 1.05} L ${-R * 1.05} 0 Z"
-        fill="${o.color}" stroke="#fff" stroke-width="6" stroke-linejoin="round"/>${inner(o.label, 30)}`,
+    fr: 'Défenseur (D)', tip: 'Défenseur — lettre D',
+    cat: 'players', defLabel: 'D', official: true,
+    draw: (o) => inner(o.label || 'D', fitSize(o.label || 'D', R * 1.5), o.color),
   },
   center: {
-    fr: 'Centre', tip: 'Centre — cercle avec repère central',
-    cat: 'players', defLabel: 'C',
-    draw: (o) => `<circle r="${R}" fill="${o.color}" stroke="#fff" stroke-width="6"/>
-      <line x1="0" y1="${-R * 0.98}" x2="0" y2="${R * 0.98}" stroke="#fff" stroke-width="5" opacity=".55"/>
-      ${inner(o.label)}`,
+    fr: 'Centre (C)', tip: 'Centre — lettre C',
+    cat: 'players', defLabel: 'C', official: true,
+    draw: (o) => inner(o.label || 'C', fitSize(o.label || 'C', R * 1.5), o.color),
   },
   winger: {
-    fr: 'Ailier', tip: 'Ailier — cercle avec chevron latéral',
-    cat: 'players', defLabel: 'A',
-    draw: (o) => `<circle r="${R}" fill="${o.color}" stroke="#fff" stroke-width="6"/>
-      <path d="M ${-R * 0.55} ${-R * 0.5} L ${R * 0.1} 0 L ${-R * 0.55} ${R * 0.5}"
-        fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".7"/>
-      <g transform="translate(12,0)">${inner(o.label, 28)}</g>`,
+    fr: 'Ailier (W)', tip: 'Ailier — lettre W',
+    cat: 'players', defLabel: 'W', official: true,
+    draw: (o) => inner(o.label || 'W', fitSize(o.label || 'W', R * 1.5), o.color),
   },
   goalie: {
-    fr: 'Gardien', tip: 'Gardien — bouclier',
-    cat: 'players', defLabel: 'G',
-    draw: (o) => `<path d="M 0 ${-R * 1.1} L ${R * 0.95} ${-R * 0.6} L ${R * 0.95} ${R * 0.25}
-        Q ${R * 0.95} ${R * 1.05} 0 ${R * 1.2} Q ${-R * 0.95} ${R * 1.05} ${-R * 0.95} ${R * 0.25}
-        L ${-R * 0.95} ${-R * 0.6} Z" fill="${o.color}" stroke="#fff" stroke-width="6" stroke-linejoin="round"/>
-      ${inner(o.label, 30)}`,
+    fr: 'Gardien de but (G)', tip: 'Gardien de but — lettre G',
+    cat: 'players', defLabel: 'G', official: true,
+    draw: (o) => inner(o.label || 'G', fitSize(o.label || 'G', R * 1.5), o.color),
   },
   coach: {
-    fr: 'Entraîneur', tip: 'Entraîneur — cercle barré d’un sifflet',
-    cat: 'players', defLabel: 'E',
-    draw: (o) => `<circle r="${R}" fill="none" stroke="${o.color}" stroke-width="9"/>
-      <circle r="${R * 0.55}" fill="${o.color}"/>
-      ${inner(o.label, 26)}`,
+    fr: 'Entraîneur (©)', tip: 'Entraîneur — lettre C entourée',
+    cat: 'players', defLabel: 'C', official: true,
+    draw: (o) => `<circle r="${R * 0.86}" fill="${VEIL}" stroke="${o.color}" stroke-width="7"/>
+      ${inner(o.label || 'C', fitSize(o.label || 'C', R * 0.9), o.color)}`,
   },
 
   puck: {
     fr: 'Rondelle', tip: 'Rondelle — disque plein',
-    cat: 'equipment',
-    draw: (o) => `<ellipse rx="${R * 0.42}" ry="${R * 0.3}" fill="${o.color}" stroke="#fff" stroke-width="3"/>`,
+    cat: 'equipment', official: true,
+    draw: (o) => `<circle r="${R * 0.34}" fill="${o.color}"/>`,
   },
   pucks: {
     fr: 'Groupe de rondelles', tip: 'Réserve de rondelles',
-    cat: 'equipment',
-    draw: (o) => `<g fill="${o.color}" stroke="#fff" stroke-width="2.5">
-      <ellipse cx="${-R * 0.4}" cy="${R * 0.2}" rx="${R * 0.34}" ry="${R * 0.24}"/>
-      <ellipse cx="${R * 0.4}" cy="${R * 0.2}" rx="${R * 0.34}" ry="${R * 0.24}"/>
-      <ellipse cx="0" cy="${-R * 0.28}" rx="${R * 0.34}" ry="${R * 0.24}"/></g>`,
+    cat: 'equipment', official: false,
+    draw: (o) => `<g fill="${o.color}">
+      <circle cx="${-R * 0.36}" cy="${R * 0.22}" r="${R * 0.3}"/>
+      <circle cx="${R * 0.36}" cy="${R * 0.22}" r="${R * 0.3}"/>
+      <circle cx="0" cy="${-R * 0.3}" r="${R * 0.3}"/></g>`,
   },
   cone: {
-    fr: 'Cône', tip: 'Cône de repère',
-    cat: 'equipment',
-    draw: (o) => `<path d="M 0 ${-R * 0.95} L ${R * 0.68} ${R * 0.7} L ${-R * 0.68} ${R * 0.7} Z"
-        fill="${o.color}" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>
-      <rect x="${-R * 0.86}" y="${R * 0.62}" width="${R * 1.72}" height="${R * 0.26}" rx="4"
-        fill="${o.color}" stroke="#fff" stroke-width="3"/>`,
+    fr: 'Cône ou obstacle', tip: 'Cône ou obstacle — triangle plein',
+    cat: 'equipment', official: true, defColor: '#d2262c',
+    draw: (o) => `<path d="M 0 ${-R * 0.95} L ${R * 0.85} ${R * 0.7} L ${-R * 0.85} ${R * 0.7} Z"
+        fill="${o.color}" stroke-linejoin="round"/>`,
   },
   net: {
-    fr: 'Filet', tip: 'But réglementaire',
-    cat: 'equipment',
-    draw: (o) => `<g stroke="${o.color}" fill="none" stroke-width="6">
-      <path d="M ${-R * 0.9} ${-R * 0.75} L ${-R * 0.9} ${R * 0.75} L ${R * 0.55} ${R * 0.5}
-        L ${R * 0.55} ${-R * 0.5} Z" stroke-linejoin="round" fill="rgba(255,255,255,.55)"/>
-      <g stroke-width="2.5" opacity=".75">
-        <line x1="${-R * 0.9}" y1="${-R * 0.25}" x2="${R * 0.55}" y2="${-R * 0.17}"/>
-        <line x1="${-R * 0.9}" y1="${R * 0.25}" x2="${R * 0.55}" y2="${R * 0.17}"/>
-        <line x1="${-R * 0.3}" y1="${-R * 0.66}" x2="${-R * 0.3}" y2="${R * 0.66}"/>
-        <line x1="${R * 0.15}" y1="${-R * 0.56}" x2="${R * 0.15}" y2="${R * 0.56}"/>
-      </g></g>`,
+    fr: 'Filet', tip: 'Filet — ouverture vers la glace',
+    cat: 'equipment', official: true,
+    draw: (o) => `<path d="M ${R * 0.62} ${-R * 0.78} L ${-R * 0.62} ${-R * 0.78}
+        L ${-R * 0.62} ${R * 0.78} L ${R * 0.62} ${R * 0.78}"
+        fill="${VEIL}" stroke="${o.color}" stroke-width="8"
+        stroke-linejoin="round" stroke-linecap="round"/>`,
   },
   'mini-net': {
     fr: 'Mini-filet', tip: 'Mini-but d’entraînement',
-    cat: 'equipment',
-    draw: (o) => `<g stroke="${o.color}" fill="none" stroke-width="5">
-      <path d="M ${-R * 0.5} ${-R * 0.42} L ${-R * 0.5} ${R * 0.42} L ${R * 0.3} ${R * 0.28}
-        L ${R * 0.3} ${-R * 0.28} Z" stroke-linejoin="round" fill="rgba(255,255,255,.55)"/>
-      <line x1="${-R * 0.5}" y1="0" x2="${R * 0.3}" y2="0" stroke-width="2.5" opacity=".7"/></g>`,
+    cat: 'equipment', official: false,
+    draw: (o) => `<path d="M ${R * 0.38} ${-R * 0.46} L ${-R * 0.38} ${-R * 0.46}
+        L ${-R * 0.38} ${R * 0.46} L ${R * 0.38} ${R * 0.46}"
+        fill="${VEIL}" stroke="${o.color}" stroke-width="6"
+        stroke-linejoin="round" stroke-linecap="round"/>`,
+  },
+  stick: {
+    fr: 'Position du bâton', tip: 'Position du bâton — palette au sol',
+    cat: 'equipment', official: true,
+    draw: (o) => `<path d="M ${-R * 0.95} ${-R * 0.45} Q ${R * 0.1} ${R * 0.1} ${R * 0.92} ${R * 0.2}"
+      fill="none" stroke="${o.color}" stroke-width="9" stroke-linecap="round"/>`,
   },
   tire: {
     fr: 'Pneu', tip: 'Pneu — obstacle bas',
-    cat: 'equipment',
-    draw: (o) => `<circle r="${R * 0.8}" fill="none" stroke="${o.color}" stroke-width="${R * 0.32}"/>
-      <circle r="${R * 0.8}" fill="none" stroke="#fff" stroke-width="2" opacity=".5"/>`,
-  },
-  stick: {
-    fr: 'Bâton', tip: 'Bâton posé sur la glace',
-    cat: 'equipment',
-    draw: (o) => `<g stroke="${o.color}" stroke-width="7" stroke-linecap="round" fill="none">
-      <line x1="${-R * 0.95}" y1="${-R * 0.5}" x2="${R * 0.4}" y2="${R * 0.35}"/>
-      <path d="M ${R * 0.4} ${R * 0.35} L ${R * 0.95} ${R * 0.3}" stroke-width="12"/></g>`,
+    cat: 'equipment', official: false,
+    draw: (o) => `<circle r="${R * 0.74}" fill="none" stroke="${o.color}" stroke-width="${R * 0.3}"/>`,
   },
   obstacle: {
-    fr: 'Obstacle', tip: 'Obstacle ou barrière',
-    cat: 'equipment',
-    draw: (o) => `<rect x="${-R}" y="${-R * 0.34}" width="${R * 2}" height="${R * 0.68}" rx="5"
-        fill="none" stroke="${o.color}" stroke-width="6"/>
-      <g stroke="${o.color}" stroke-width="5" opacity=".8">
-        <line x1="${-R * 0.6}" y1="${-R * 0.34}" x2="${-R * 0.95}" y2="${R * 0.34}"/>
-        <line x1="${-R * 0.1}" y1="${-R * 0.34}" x2="${-R * 0.45}" y2="${R * 0.34}"/>
-        <line x1="${R * 0.4}" y1="${-R * 0.34}" x2="${R * 0.05}" y2="${R * 0.34}"/>
-        <line x1="${R * 0.9}" y1="${-R * 0.34}" x2="${R * 0.55}" y2="${R * 0.34}"/></g>`,
+    fr: 'Barrière', tip: 'Barrière ou obstacle allongé',
+    cat: 'equipment', official: false,
+    draw: (o) => `<rect x="${-R}" y="${-R * 0.3}" width="${R * 2}" height="${R * 0.6}" rx="5"
+        fill="${VEIL}" stroke="${o.color}" stroke-width="6"/>
+      <g stroke="${o.color}" stroke-width="5">
+        <line x1="${-R * 0.55}" y1="${-R * 0.3}" x2="${-R * 0.9}" y2="${R * 0.3}"/>
+        <line x1="${-R * 0.05}" y1="${-R * 0.3}" x2="${-R * 0.4}" y2="${R * 0.3}"/>
+        <line x1="${R * 0.45}" y1="${-R * 0.3}" x2="${R * 0.1}" y2="${R * 0.3}"/>
+        <line x1="${R * 0.95}" y1="${-R * 0.3}" x2="${R * 0.6}" y2="${R * 0.3}"/></g>`,
   },
+
   step: {
-    fr: 'Numéro de séquence', tip: 'Numéro d’étape à placer sur la glace',
-    cat: 'text', defLabel: '1',
-    draw: (o) => `<circle r="${R * 0.62}" fill="#fff" stroke="${o.color}" stroke-width="6"/>
+    fr: 'Numéro d’étape', tip: 'Numéro d’étape à placer sur la glace',
+    cat: 'text', defLabel: '1', official: false,
+    draw: (o) => `<circle r="${R * 0.6}" fill="#fff" stroke="${o.color}" stroke-width="6"/>
       ${inner(o.label || '1', 34, o.color)}`,
   },
   zone: {
     fr: 'Zone surlignée', tip: 'Rectangle de zone — redimensionnable',
-    cat: 'text', resizable: true, defW: 400, defH: 300,
+    cat: 'text', resizable: true, defW: 400, defH: 300, official: false,
     draw: (o) => {
       const w = o.w || 400, h = o.h || 300;
       return `<rect x="${-w / 2}" y="${-h / 2}" width="${w}" height="${h}" rx="10"
-        fill="${o.color}" fill-opacity=".16" stroke="${o.color}" stroke-width="5" stroke-dasharray="22 14"/>`;
+        fill="${o.color}" fill-opacity=".14" stroke="${o.color}" stroke-width="5" stroke-dasharray="22 14"/>`;
     },
   },
   text: {
     fr: 'Texte libre', tip: 'Bloc de texte',
-    cat: 'text', textual: true,
+    cat: 'text', textual: true, official: false,
     draw: (o) => {
       const fs = o.fontSize || 46;
       const lines = String(o.text || 'Texte').split('\n');
@@ -285,29 +286,43 @@ function offsetPoly(dense, acc, f) {
    Styles de trajectoire
    -------------------------------------------------------------------------- */
 
+/**
+ * Styles de trajectoire.
+ *
+ * Les six premiers reprennent la légende Hockey Canada / Hockey Québec
+ * (`official: true`). Les suivants sont des compléments de l'application :
+ * utiles, mais à expliquer en légende si le diagramme sort du club.
+ */
 export const PATH_STYLES = {
-  skate:      { fr: 'Patinage avant',  tip: 'Patinage avant — trait plein', defCap: 'arrow' },
-  backward:   { fr: 'Patinage arrière', tip: 'Patinage arrière — trait à arceaux', defCap: 'arrow' },
-  'puck-carry': { fr: 'Avec rondelle', tip: 'Patinage avec la rondelle — trait ondulé', defCap: 'arrow' },
-  pass:       { fr: 'Passe',           tip: 'Passe — trait pointillé', defCap: 'arrow' },
-  shot:       { fr: 'Tir',             tip: 'Tir — trait double', defCap: 'arrow' },
-  lateral:    { fr: 'Déplacement latéral', tip: 'Déplacement latéral — tirets barrés', defCap: 'arrow' },
-  crossover:  { fr: 'Croisements',     tip: 'Croisements — hachures obliques', defCap: 'arrow' },
-  pivot:      { fr: 'Pivot',           tip: 'Pivot avant ↔ arrière', defCap: 'pivot' },
-  turn:       { fr: 'Virage',          tip: 'Virage serré', defCap: 'arrow' },
-  check:      { fr: 'Mise en échec',   tip: 'Mise en échec ou pression défensive', defCap: 'check' },
-  handoff:    { fr: 'Remise',          tip: 'Transport ou remise de rondelle', defCap: 'tee' },
-  freehand:   { fr: 'Crayon libre',    tip: 'Tracé libre lissé', defCap: 'none' },
+  skate:          { fr: 'Patinage avant', tip: 'Patinage avant sans la rondelle — trait plein et flèche',
+                    defCap: 'arrow', official: true },
+  'puck-carry':   { fr: 'Patinage avant avec la rondelle', tip: 'Patinage avant avec la rondelle — trait ondulé',
+                    defCap: 'arrow', official: true },
+  backward:       { fr: 'Patinage arrière', tip: 'Patinage arrière — chaîne de boucles',
+                    defCap: 'none', official: true },
+  'backward-puck': { fr: 'Patinage arrière avec la rondelle', tip: 'Patinage arrière avec la rondelle — boucles et rondelle au départ',
+                    defCap: 'none', official: true },
+  pass:           { fr: 'Passe / trajectoire de la rondelle', tip: 'Passe ou trajectoire de la rondelle — trait pointillé',
+                    defCap: 'arrow', official: true },
+  shot:           { fr: 'Tir', tip: 'Tir — trait double', defCap: 'arrow', official: true },
+  pivot:          { fr: 'Pivot', tip: 'Pivot — boucle en fin de tracé', defCap: 'pivot', official: true },
+
+  lateral:        { fr: 'Déplacement latéral', tip: 'Complément — tirets barrés', defCap: 'arrow', official: false },
+  crossover:      { fr: 'Croisements', tip: 'Complément — hachures obliques', defCap: 'arrow', official: false },
+  turn:           { fr: 'Virage', tip: 'Complément — virage serré', defCap: 'arrow', official: false },
+  check:          { fr: 'Mise en échec', tip: 'Complément — pression défensive, trait en zigzag', defCap: 'check', official: false },
+  handoff:        { fr: 'Remise', tip: 'Complément — transport ou remise de rondelle', defCap: 'tee', official: false },
+  freehand:       { fr: 'Crayon libre', tip: 'Tracé libre lissé', defCap: 'none', official: false },
 };
 export const PATH_STYLE_IDS = Object.keys(PATH_STYLES);
 
 export const CAPS = {
-  none:  { fr: 'Aucune', tip: 'Pas d’extrémité' },
-  arrow: { fr: 'Flèche', tip: 'Flèche — direction du mouvement' },
-  stop:  { fr: 'Arrêt',  tip: 'Arrêt — barre perpendiculaire' },
-  pivot: { fr: 'Pivot',  tip: 'Pivot — demi-cercle' },
-  check: { fr: 'Mise en échec', tip: 'Mise en échec — double barre' },
-  tee:   { fr: 'Remise', tip: 'Remise — té' },
+  none:  { fr: 'Aucune', tip: 'Pas d’extrémité', official: true },
+  arrow: { fr: 'Flèche', tip: 'Flèche — direction du mouvement', official: true },
+  stop:  { fr: 'Arrêt à deux pieds', tip: 'Arrêt à deux pieds — flèche suivie d’une barre', official: true },
+  pivot: { fr: 'Pivot', tip: 'Pivot — boucle', official: true },
+  check: { fr: 'Mise en échec', tip: 'Complément — double barre', official: false },
+  tee:   { fr: 'Remise', tip: 'Complément — té', official: false },
 };
 export const CAP_IDS = Object.keys(CAPS);
 
@@ -318,10 +333,17 @@ function capMarkup(kind, p, dirX, dirY, w, color) {
     case 'arrow':
       return `<path d="M ${p.x} ${p.y} L ${p.x - dirX * s * 1.5 + nx * s} ${p.y - dirY * s * 1.5 + ny * s}
         L ${p.x - dirX * s * 1.5 - nx * s} ${p.y - dirY * s * 1.5 - ny * s} Z" fill="${color}"/>`;
-    case 'stop':
-      return `<line x1="${p.x + nx * s * 1.3}" y1="${p.y + ny * s * 1.3}"
-        x2="${p.x - nx * s * 1.3}" y2="${p.y - ny * s * 1.3}"
-        stroke="${color}" stroke-width="${w * 1.5}" stroke-linecap="round"/>`;
+    case 'stop': {
+      // Légende officielle : la flèche du patinage avant, puis la barre
+      // perpendiculaire de l'arrêt à deux pieds.
+      const head = `<path d="M ${p.x - dirX * s * 0.9} ${p.y - dirY * s * 0.9}
+        L ${p.x - dirX * s * 2.4 + nx * s} ${p.y - dirY * s * 2.4 + ny * s}
+        L ${p.x - dirX * s * 2.4 - nx * s} ${p.y - dirY * s * 2.4 - ny * s} Z" fill="${color}"/>`;
+      const bar = `<line x1="${p.x + nx * s * 1.25}" y1="${p.y + ny * s * 1.25}"
+        x2="${p.x - nx * s * 1.25}" y2="${p.y - ny * s * 1.25}"
+        stroke="${color}" stroke-width="${w * 1.4}" stroke-linecap="round"/>`;
+      return head + bar;
+    }
     case 'tee':
       return `<line x1="${p.x + nx * s}" y1="${p.y + ny * s}" x2="${p.x - nx * s}" y2="${p.y - ny * s}"
         stroke="${color}" stroke-width="${w}" stroke-linecap="round"/>`;
@@ -330,9 +352,16 @@ function capMarkup(kind, p, dirX, dirY, w, color) {
         <line x1="${p.x + nx * s * 1.3}" y1="${p.y + ny * s * 1.3}" x2="${p.x - nx * s * 1.3}" y2="${p.y - ny * s * 1.3}"/>
         <line x1="${p.x - dirX * s * 0.9 + nx * s * 1.3}" y1="${p.y - dirY * s * 0.9 + ny * s * 1.3}"
               x2="${p.x - dirX * s * 0.9 - nx * s * 1.3}" y2="${p.y - dirY * s * 0.9 - ny * s * 1.3}"/></g>`;
-    case 'pivot':
-      return `<path d="M ${p.x + nx * s} ${p.y + ny * s} A ${s} ${s} 0 0 1 ${p.x - nx * s} ${p.y - ny * s}"
+    case 'pivot': {
+      // Boucle de 300° posée à l'extrémité, comme dans la légende officielle.
+      const r = Math.max(w * 2.3, 13);
+      const cx = p.x - dirX * r, cy = p.y - dirY * r;
+      const a0 = Math.atan2(dirY, dirX);
+      const a1 = a0 + (300 * Math.PI) / 180;
+      return `<path d="M ${cx + r * Math.cos(a0)} ${cy + r * Math.sin(a0)}
+        A ${r} ${r} 0 1 1 ${cx + r * Math.cos(a1)} ${cy + r * Math.sin(a1)}"
         fill="none" stroke="${color}" stroke-width="${w}" stroke-linecap="round"/>`;
+    }
     default: return '';
   }
 }
@@ -397,18 +426,36 @@ export function drawPath(p, opts = {}) {
       body = `<path d="${dOf(offsetPoly(dense, acc, (s) => Math.sin((s / lam) * Math.PI * 2) * amp))}" ${attrs()}/>`;
       break;
     }
-    case 'backward': {
-      // Trait plein ponctué de demi-cercles ouverts : la corde vaut exactement
-      // le diamètre, sinon la bosse est plus mince que le trait et disparaît.
-      body = `<path d="${dOf(dense)}" ${attrs()}/>`;
-      const r0 = w * 1.9;
-      const step = r0 * 3.6;
-      for (let d = step * 0.5; d < L - r0 * 1.2; d += step) {
-        const s0 = sampleAt(dense, acc, d);
-        const ax = s0.x - s0.tx * r0, ay = s0.y - s0.ty * r0;
-        const bx = s0.x + s0.tx * r0, by = s0.y + s0.ty * r0;
-        body += `<path d="M ${ax} ${ay} A ${r0} ${r0} 0 0 1 ${bx} ${by}" fill="none"
-          stroke="${color}" stroke-width="${w * 0.85}" stroke-linecap="round"/>`;
+    case 'backward':
+    case 'backward-puck': {
+      // Chaîne de demi-cercles bout à bout, tous du même côté : c'est la
+      // boucle continue de la légende, et non un trait droit décoré. Toutes
+      // du même côté, sinon le résultat ressemble à l'onde du porteur de
+      // rondelle et les deux styles deviennent confondables.
+      const r0 = w * 2.7;
+      const arcs = [];
+      let d = 0;
+      while (d + r0 * 2 <= L) {
+        const a = sampleAt(dense, acc, d);
+        const b = sampleAt(dense, acc, d + r0 * 2);
+        arcs.push(`M ${a.x.toFixed(1)} ${a.y.toFixed(1)}
+          A ${r0} ${r0} 0 0 1 ${b.x.toFixed(1)} ${b.y.toFixed(1)}`);
+        d += r0 * 2;
+      }
+      if (!arcs.length) {
+        body = `<path d="${dOf(dense)}" ${attrs()}/>`;
+      } else {
+        body = `<path d="${arcs.join(' ')}" ${attrs({ 'stroke-linecap': 'round' })}/>`;
+        // Le dernier bout de trajet, trop court pour une boucle complète.
+        const tail = sampleAt(dense, acc, d);
+        const endPt = dense[dense.length - 1];
+        if (Math.hypot(endPt.x - tail.x, endPt.y - tail.y) > w) {
+          body += `<path d="M ${tail.x} ${tail.y} L ${endPt.x} ${endPt.y}" ${attrs()}/>`;
+        }
+      }
+      if (p.style === 'backward-puck') {
+        const s0 = dense[0];
+        body += `<circle cx="${s0.x}" cy="${s0.y}" r="${w * 1.5}" fill="${color}"/>`;
       }
       break;
     }
@@ -435,12 +482,10 @@ export function drawPath(p, opts = {}) {
       body = `<path d="${dOf(dense)}" ${attrs({ 'stroke-dasharray': `${w * 4.5} ${w * 1.8} ${w * 0.9} ${w * 1.8}` })}/>`;
       break;
     }
-    case 'pivot': {
+    case 'pivot':
+      // Trait plein : la boucle du pivot est portée par l'extrémité de ligne.
       body = `<path d="${dOf(dense)}" ${attrs()}/>`;
-      const m = sampleAt(dense, acc, L / 2);
-      body += `<circle cx="${m.x}" cy="${m.y}" r="${w * 2.1}" fill="none" stroke="${color}" stroke-width="${w * 0.8}"/>`;
       break;
-    }
     case 'turn': {
       body = `<path d="${dOf(dense)}" ${attrs()}/>`;
       const m = sampleAt(dense, acc, L * 0.5);

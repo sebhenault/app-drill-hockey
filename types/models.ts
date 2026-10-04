@@ -67,31 +67,53 @@ export type SurfaceId =
   | 'blank'       // patinoire vide (bandes seulement)
   | 'grid';       // grille libre, sans marquage
 
-/** Familles d'objets déposables. */
+/**
+ * Familles d'objets déposables.
+ *
+ * Les symboles suivent la légende utilisée par Hockey Canada et Hockey Québec :
+ * cercle ouvert pour un joueur à l'offensive, triangle ouvert pour un joueur à
+ * la défensive, lettres F / D / C / W / G pour les postes, C entouré pour
+ * l'entraîneur, disque plein pour la rondelle, triangle plein pour un cône.
+ * Les tracés SVG sont des créations originales de l'application.
+ */
 export type ObjectKind =
-  | 'player' | 'opponent' | 'forward' | 'defence' | 'center' | 'winger'
-  | 'goalie' | 'coach'
-  | 'puck' | 'pucks'
-  | 'cone' | 'net' | 'mini-net' | 'tire' | 'stick' | 'obstacle'
+  // Légende officielle
+  | 'player'      // joueur à l'offensive — cercle ouvert
+  | 'opponent'    // joueur à la défensive — triangle ouvert
+  | 'forward' | 'defence' | 'center' | 'winger' | 'goalie'   // F, D, C, W, G
+  | 'coach'       // C entouré
+  | 'puck' | 'cone' | 'net' | 'stick'
+  // Compléments propres à l'application
+  | 'pucks' | 'mini-net' | 'tire' | 'obstacle'
   | 'zone' | 'text' | 'step';
 
-/** Styles de trajectoire. Le sens fonctionnel suit la convention usuelle
- *  des diagrammes de hockey ; les tracés SVG sont des créations originales. */
+/**
+ * Styles de trajectoire.
+ * Les sept premiers reprennent la légende Hockey Canada / Hockey Québec ;
+ * les suivants sont des compléments à expliquer en légende si le diagramme
+ * sort du club.
+ */
 export type PathStyle =
-  | 'skate'        // patinage avant — trait plein + flèche
-  | 'backward'     // patinage arrière — trait à boucles ouvertes
-  | 'puck-carry'   // patinage avec rondelle — ondulation
-  | 'pass'         // passe — pointillé
-  | 'shot'         // tir — trait double
-  | 'lateral'      // déplacement latéral — tirets courts + barres
-  | 'crossover'    // croisements — hachures obliques
-  | 'pivot'        // pivot avant↔arrière
-  | 'turn'         // virage serré
-  | 'check'        // mise en échec / pression — trait épais en zigzag
-  | 'handoff'      // remise / transport de rondelle
-  | 'freehand';    // crayon libre (lissé)
+  | 'skate'          // patinage avant sans la rondelle — trait plein + flèche
+  | 'puck-carry'     // patinage avant avec la rondelle — trait ondulé
+  | 'backward'       // patinage arrière — chaîne de boucles
+  | 'backward-puck'  // patinage arrière avec la rondelle — boucles + rondelle
+  | 'pass'           // passe ou trajectoire de la rondelle — pointillé
+  | 'shot'           // tir — trait double
+  | 'pivot'          // pivot — boucle en fin de tracé
+  // Compléments
+  | 'lateral'        // déplacement latéral — tirets barrés
+  | 'crossover'      // croisements — hachures obliques
+  | 'turn'           // virage serré
+  | 'check'          // mise en échec / pression — zigzag
+  | 'handoff'        // remise de rondelle
+  | 'freehand';      // crayon libre (lissé)
 
-/** Extrémité de ligne. */
+/**
+ * Extrémité de ligne.
+ * `stop` est l'arrêt à deux pieds de la légende : flèche suivie d'une barre.
+ * `pivot` est la boucle terminale.
+ */
 export type CapStyle = 'none' | 'arrow' | 'stop' | 'pivot' | 'check' | 'tee';
 
 /** Point du canevas, en unités glace. */

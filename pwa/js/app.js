@@ -1064,27 +1064,38 @@ function viewSettings() {
 function viewSymbols() {
   const wrap = el('div', { class: 'view-pad' });
   wrap.appendChild(el('h1', { text: t('set.symbols') }));
-  wrap.appendChild(el('p', { class: 'txt-2', text: 'Chaque symbole se distingue par sa forme, pas seulement par sa couleur : les diagrammes restent lisibles en noir et blanc et à l’impression.' }));
+  wrap.appendChild(el('p', { class: 'txt-2', text: 'Les symboles marqués « Légende officielle » suivent la convention utilisée par Hockey Canada et Hockey Québec : un entraîneur d’une autre équipe lit le diagramme sans explication. Les « compléments » sont propres à l’application — mets-les en légende si le diagramme sort de ton club.' }));
+  wrap.appendChild(el('p', { class: 'txt-2 txt-sm', text: 'Chaque symbole se distingue par sa forme, pas seulement par sa couleur : les diagrammes restent lisibles en noir et blanc et à l’impression.' }));
 
   const grid = (title, entries) => {
     const box = el('section', { class: 'mt-3' }, [el('h2', { text: title })]);
-    box.appendChild(el('div', { class: 'grid-cards' }, entries.map(({ icon, name, tip }) => el('div', { class: 'card' }, [
+    box.appendChild(el('div', { class: 'grid-cards' }, entries.map(({ icon, name, tip, official }) => el('div', { class: 'card' }, [
       el('div', { style: 'width:64px;height:64px;color:var(--tx-0);background:var(--ice);border-radius:10px;padding:4px', html: icon }),
-      el('h3', { class: 'mt-1', text: name }),
-      el('p', { class: 'txt-sm txt-2', style: 'margin:0', text: tip }),
+      el('div', { class: 'flex items-c gap-1 wrap mt-1' }, [
+        el('h3', { style: 'margin:0', text: name }),
+        official
+          ? el('span', { class: 'badge badge-ok', text: 'Légende officielle' })
+          : el('span', { class: 'badge', text: 'Complément' }),
+      ]),
+      el('p', { class: 'txt-sm txt-2', style: 'margin:4px 0 0', text: tip }),
     ]))));
     return box;
   };
 
-  const objEntries = (ids) => ids.map((id) => ({ icon: objectIcon(id, '#12212e'), name: OBJECTS[id].fr, tip: OBJECTS[id].tip }));
+  const objEntries = (ids) => ids.map((id) => ({
+    icon: objectIcon(id, OBJECTS[id].defColor || '#12212e'),
+    name: OBJECTS[id].fr, tip: OBJECTS[id].tip, official: OBJECTS[id].official,
+  }));
   wrap.appendChild(grid('Joueurs et personnes',
     objEntries(['player', 'opponent', 'forward', 'defence', 'center', 'winger', 'goalie', 'coach'])));
   wrap.appendChild(grid('Équipement et objets',
     objEntries(['puck', 'pucks', 'cone', 'net', 'mini-net', 'tire', 'stick', 'obstacle', 'zone', 'text', 'step'])));
   wrap.appendChild(grid('Trajectoires',
-    Object.keys(PATH_STYLES).map((id) => ({ icon: pathIcon(id, '#12212e'), name: PATH_STYLES[id].fr, tip: PATH_STYLES[id].tip }))));
+    Object.keys(PATH_STYLES).map((id) => ({ icon: pathIcon(id, '#12212e'),
+      name: PATH_STYLES[id].fr, tip: PATH_STYLES[id].tip, official: PATH_STYLES[id].official }))));
   wrap.appendChild(grid('Extrémités de ligne',
-    Object.keys(CAPS).map((id) => ({ icon: capIcon(id, '#12212e'), name: CAPS[id].fr, tip: CAPS[id].tip }))));
+    Object.keys(CAPS).map((id) => ({ icon: capIcon(id, '#12212e'),
+      name: CAPS[id].fr, tip: CAPS[id].tip, official: CAPS[id].official }))));
 
   wrap.appendChild(el('section', { class: 'mt-3' }, [
     el('h2', { text: 'Surfaces de glace' }),
