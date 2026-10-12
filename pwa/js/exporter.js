@@ -150,26 +150,34 @@ async function inflate(bytes) {
   } catch { return null; }
 }
 
-/** Construit un lien autonome contenant l'exercice. */
-export async function shareLink(drill) {
-  const json = JSON.stringify(drill);
-  const raw = new TextEncoder().encode(json);
+/** Encode un objet JSON en texte compact pour un fragment d'URL. */
+export async function encodePayload(obj) {
+  const raw = new TextEncoder().encode(JSON.stringify(obj));
   const comp = await deflate(raw);
-  const payload = comp ? 'z' + b64url.enc(comp) : 'r' + b64url.enc(raw);
-  const base = location.href.split('#')[0];
-  return `${base}#/partage/${payload}`;
+  return comp ? 'z' + b64url.enc(comp) : 'r' + b64url.enc(raw);
 }
 
-/** Décode un exercice reçu par lien. */
-export async function readShareLink(payload) {
+/** Inverse de encodePayload ; null si le texte est tronqué ou invalide. */
+export async function decodePayload(payload) {
   try {
     const kind = payload[0];
     const bytes = b64url.dec(payload.slice(1));
     const raw = kind === 'z' ? await inflate(bytes) : bytes;
     if (!raw) return null;
-    const obj = JSON.parse(new TextDecoder().decode(raw));
-    return isDrillLike(obj) ? obj : null;
+    return JSON.parse(new TextDecoder().decode(raw));
   } catch { return null; }
+}
+
+/** Construit un lien autonome contenant l'exercice. */
+export async function shareLink(drill) {
+  const base = location.href.split('#')[0];
+  return `${base}#/partage/${await encodePayload(drill)}`;
+}
+
+/** Décode un exercice reçu par lien. */
+export async function readShareLink(payload) {
+  const obj = await decodePayload(payload);
+  return isDrillLike(obj) ? obj : null;
 }
 
 export async function copyShareLink(drill) {

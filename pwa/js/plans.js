@@ -9,6 +9,7 @@ import { AGE_GROUPS, labelAge } from './taxonomy.js';
 import { t } from './i18n.js';
 import { drillPrintHtml, printHtml, exportJson, bundle } from './exporter.js';
 import { standaloneSvg } from './render.js';
+import { practiceCoachLink, drillCoachLink, shareOrCopy } from './coach.js';
 
 export function newPlan() {
   const now = nowIso();
@@ -247,6 +248,7 @@ export function viewPlanEditor(ctx, plan) {
   /* ---- Actions ---- */
   const actions = el('div', { class: 'card stack' }, [
     el('h3', { text: t('act.export') }),
+    el('button', { class: 'btn btn-primary btn-block', onclick: () => openCoachShare(ctx, plan) }, ['Liens pour les coachs']),
     el('button', { class: 'btn btn-block', onclick: () => printPlan(ctx, plan) }, [t('act.print') + ' / PDF']),
     el('button', { class: 'btn btn-block', onclick: () => exportJson(bundle({ plans: [plan] }), `plan-${plan.date}.json`) },
       [t('exp.json')]),
@@ -276,6 +278,38 @@ export function viewPlanEditor(ctx, plan) {
   );
   renderItems();
   return wrap;
+}
+
+/* ==========================================================================
+   Liens pour les coachs
+   ========================================================================== */
+function openCoachShare(ctx, plan) {
+  const drillItems = plan.items
+    .map((it) => ({ it, d: it.type === 'drill' && it.drillId ? ctx.drillById(it.drillId) : null }))
+    .filter((x) => x.d);
+  const noVideo = drillItems.filter((x) => !(x.d.videos && x.d.videos.length)).length;
+
+  const body = el('div', { class: 'stack' }, [
+    el('p', { class: 'txt-sm', text: 'Les coachs ouvrent le lien sur leur téléphone : aucun compte ni application à installer. '
+      + 'Chaque exercice montre son diagramme, sa vidéo et ses points clés.' }),
+    el('button', { class: 'btn btn-primary btn-block', onclick: async () => {
+      shareOrCopy(await practiceCoachLink(plan, ctx.drillById), plan.title);
+    } }, ['Partager toute la pratique']),
+    el('button', { class: 'btn btn-block', onclick: async () => {
+      const url = await practiceCoachLink(plan, ctx.drillById);
+      ctx.closeModal();
+      location.href = url;
+    } }, ['Voir l’aperçu']),
+    noVideo ? el('p', { class: 'notice notice-warn txt-sm',
+      text: `${noVideo} exercice(s) sans vidéo. Ajoute l’adresse dans la fiche (bouton Informations de l’éditeur).` }) : null,
+    drillItems.length ? el('h4', { class: 'mt-1', text: 'Un exercice à la fois' }) : null,
+    ...drillItems.map(({ it, d }) => el('div', { class: 'flex items-c gap-1' }, [
+      el('span', { style: 'flex:1;min-width:0', text: it.title }),
+      el('button', { class: 'btn btn-sm', onclick: async () => shareOrCopy(await drillCoachLink(d, it.duration), it.title) },
+        ['Partager']),
+    ])),
+  ]);
+  ctx.openModal('Liens pour les coachs', body, [el('button', { class: 'btn', onclick: ctx.closeModal }, [t('act.close')])]);
 }
 
 /* ==========================================================================

@@ -30,3 +30,4 @@ dans `tests/captures/` (ou dans `$SHOT_DIR`).
 | `05-partage-reglages-impression-horsligne.mjs` | guide des symboles, aller-retour du lien de partage, export/import global, thème, impression, clavier, service worker, hors ligne |
 | `06-mono-fichier.mjs` | build autonome : démarrage en `file://`, aucune requête externe, persistance |
 | `07-themes.mjs` | thème sombre, clair et `data-theme` imposé par le lecteur |
+| `08-version-coachs.mjs` | liens de pratique et d’exercice pour les coachs, affichage mobile, vidéo intégrée et externe, points clés, lien tronqué, bouton du plan |

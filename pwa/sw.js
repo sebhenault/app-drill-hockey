@@ -11,7 +11,7 @@
  * Aucune requête vers un tiers n'est interceptée ni mise en cache.
  */
 
-const VERSION = 'v1';
+const VERSION = 'v2';
 const CACHE = `drillbuilder-${VERSION}`;
 
 const SHELL = [
@@ -24,6 +24,7 @@ const SHELL = [
   './icons/icon-maskable-512.png',
   './icons/apple-touch-icon.png',
   './js/app.js',
+  './js/coach.js',
   './js/editor.js',
   './js/exporter.js',
   './js/i18n.js',

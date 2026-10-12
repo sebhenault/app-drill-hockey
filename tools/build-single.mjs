@@ -20,7 +20,7 @@ const jsDir = path.join(root, 'pwa', 'js');
 // Ordre topologique des dépendances.
 const ORDER = [
   'util.js', 'i18n.js', 'taxonomy.js', 'rink.js', 'symbols.js', 'qr.js',
-  'render.js', 'store.js', 'seed.js', 'exporter.js', 'plans.js', 'editor.js', 'app.js',
+  'render.js', 'store.js', 'seed.js', 'exporter.js', 'coach.js', 'plans.js', 'editor.js', 'app.js',
 ];
 
 const IMPORT_RE = /^\s*import\s(?:[\s\S]*?)\sfrom\s+['"][^'"]+['"];?\s*$/gm;
