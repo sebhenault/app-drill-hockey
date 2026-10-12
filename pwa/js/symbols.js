@@ -35,13 +35,22 @@ function fitSize(txt, base) {
   return base * 0.45;
 }
 
+/**
+ * Rotation de l'affichage (en degrés) que les textes doivent annuler pour
+ * rester lisibles : l'éditeur pivote la glace d'un quart de tour en portrait,
+ * mais « P1 » ou une consigne doivent rester à l'endroit.
+ */
+let textTurn = 0;
+export function setTextTurn(deg) { textTurn = deg || 0; }
+const upright = (markup) => textTurn ? `<g transform="rotate(${-textTurn})">${markup}</g>` : markup;
+
 /** Texte centré dans un symbole. Le halo blanc garde la lisibilité sur la glace. */
 function inner(txt, size = 34, fill = '#12212e') {
   if (!txt) return '';
-  return `<text x="0" y="0" fill="${fill}" font-size="${size}" font-weight="700"
+  return upright(`<text x="0" y="0" fill="${fill}" font-size="${size}" font-weight="700"
     font-family="var(--ff)" text-anchor="middle" dominant-baseline="central"
     paint-order="stroke" stroke="rgba(255,255,255,.9)" stroke-width="${size * 0.16}"
-    >${escText(txt)}</text>`;
+    >${escText(txt)}</text>`);
 }
 
 /** Remplissage très clair sous les symboles ouverts : ils restent lisibles
@@ -180,11 +189,11 @@ export const OBJECTS = {
       const fs = o.fontSize || 46;
       const lines = String(o.text || 'Texte').split('\n');
       const y0 = -((lines.length - 1) * fs * 0.6);
-      return `<text x="0" y="${y0}" fill="${o.color}" font-size="${fs}" font-weight="650"
+      return upright(`<text x="0" y="${y0}" fill="${o.color}" font-size="${fs}" font-weight="650"
         font-family="var(--ff)" text-anchor="middle" dominant-baseline="central"
         paint-order="stroke" stroke="rgba(255,255,255,.85)" stroke-width="6">${
         lines.map((l, i) => `<tspan x="0" dy="${i === 0 ? 0 : fs * 1.2}">${escText(l)}</tspan>`).join('')
-      }</text>`;
+      }</text>`);
     },
   },
 };
