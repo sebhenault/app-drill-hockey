@@ -814,6 +814,9 @@ body[data-mode="coach"] .topbar .btn-primary { display: none; }
   .badge { font-size: .8rem; }
   .hint { font-size: .84rem; }
   .drill-body .sum { font-size: .9rem; }
+  /* Avec le texte agrandi, un libellé long doit passer à la ligne plutôt que
+     déborder du bouton. */
+  .btn { white-space: normal; text-align: center; line-height: 1.2; padding-top: 6px; padding-bottom: 6px; }
   /* iOS agrandit la page dès qu'un champ de moins de 16 px reçoit le focus. */
   .inp, select, textarea, input { font-size: max(16px, .95rem); }
 }

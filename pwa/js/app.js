@@ -344,6 +344,9 @@ function viewLibrary() {
     ]),
     filtersBtn, sortSel, viewBtn,
   ]));
+  wrap.appendChild(el('div', { class: 'flex gap-1 wrap mb-2' }, [
+    el('button', { class: 'btn btn-sm', onclick: () => openLinkImport() }, ['Coller un lien d’exercice']),
+  ]));
 
   /* Panneau de filtres */
   const panel = el('div', { class: 'filters-panel', style: 'display:none' });
@@ -983,6 +986,7 @@ function viewSettings() {
         exportJson(data, `drillbuilder-${new Date().toISOString().slice(0, 10)}.json`);
       } }, [t('set.exportAll')]),
       el('button', { class: 'btn', onclick: () => fileInput.click() }, [t('set.importAll')]),
+      el('button', { class: 'btn', onclick: () => openLinkImport() }, ['Coller un lien d’exercice']),
       el('button', { class: 'btn btn-danger', onclick: async () => {
         if (!(await confirmDialog(t('msg.confirmWipe')))) return;
         await store.wipeAll();
@@ -1102,6 +1106,45 @@ function viewSymbols() {
     ]),
   ]));
   return wrap;
+}
+
+/* ==========================================================================
+   Import par lien collé
+   ========================================================================== */
+/**
+ * Sur iPhone, un lien touché s'ouvre dans Safari, même quand l'application est
+ * installée sur l'écran d'accueil — et les deux ont des stockages séparés.
+ * Coller le lien ici l'ouvre dans l'application elle-même.
+ */
+function openLinkImport() {
+  const area = el('textarea', { class: 'inp', rows: '4', placeholder: 'Colle ici le lien reçu…',
+    'aria-label': 'Lien d’exercice' });
+  const err = el('div', { class: 'err-msg', style: 'display:none' });
+  const open = () => {
+    const m = /#\/(partage|coachs)\/([A-Za-z0-9_-]+)/.exec(area.value.trim());
+    if (!m) {
+      err.textContent = 'Ce texte ne contient pas de lien d’exercice DrillBuilder.';
+      err.style.display = 'block';
+      return;
+    }
+    closeModal();
+    go(`#/${m[1]}/${m[2]}`);
+  };
+  const body = el('div', { class: 'stack' }, [
+    el('p', { class: 'txt-sm', text: 'Copie le lien reçu (texto, courriel, Claude…), puis colle-le ici : l’exercice s’ouvre dans l’application et tu pourras l’enregistrer.' }),
+    area, err,
+    navigator.clipboard && navigator.clipboard.readText
+      ? el('button', { class: 'btn btn-sm', onclick: async () => {
+        try { area.value = await navigator.clipboard.readText(); open(); }
+        catch { toast('Collage refusé : appuie longuement dans la case, puis « Coller ».', 'warn'); }
+      } }, ['Coller depuis le presse-papiers'])
+      : null,
+  ]);
+  openModal('Coller un lien d’exercice', body, [
+    el('button', { class: 'btn', onclick: closeModal }, [t('act.cancel')]),
+    el('button', { class: 'btn btn-primary', onclick: open }, ['Ouvrir']),
+  ]);
+  setTimeout(() => area.focus(), 40);
 }
 
 /* ==========================================================================
