@@ -18,8 +18,28 @@ Interface en français canadien. Architecture prête pour l’anglais.
 | **Bibliothèque** | 22 exercices de démonstration originaux, recherche plein texte, filtres combinables (âge, habileté, situation, espace, durée, difficulté, gardien, vidéo, favoris, mes exercices), vues grille et liste |
 | **Fiche** | 30 champs (objectifs, mise en place, déroulement, points d’enseignement, erreurs fréquentes, variantes, sécurité, mots-clés, source, vidéo…) |
 | **Plans de pratique** | Glisser-déposer, durées additionnées automatiquement, alerte de dépassement non bloquante, échauffement/pause/conclusion/notes, impression avec une page par exercice |
+| **Version coachs** | Lien pour une pratique complète ou pour un seul exercice : page épurée pour téléphone avec diagramme, vidéo et points clés, sans compte ni installation |
 | **Exports** | PNG, SVG, JSON, impression/PDF, copie d’image dans le presse-papiers, lien de partage autonome, code QR |
 | **Hors ligne** | Service worker + IndexedDB (repli localStorage). Aucune donnée ne quitte l’appareil |
+
+---
+
+## Envoyer une pratique aux autres coachs
+
+1. Dans chaque exercice : **Éditeur → Informations**, colle l’adresse de la vidéo
+   (YouTube ou Vimeo s’affichent dans la page ; toute autre adresse devient un
+   bouton « Voir la vidéo ») et inscris les **points d’enseignement** : ce sont
+   les points clés que verront les coachs.
+2. Dans le plan de pratique : **Liens pour les coachs**.
+   - **Partager toute la pratique** : un lien avec le déroulement minuté et tous
+     les exercices ;
+   - **Partager** à côté d’un exercice : un lien vers cet exercice seulement.
+3. Sur téléphone, la feuille de partage s’ouvre (Messages, courriel…). Sur
+   ordinateur, le lien est copié.
+
+Le contenu voyage dans le lien lui-même : rien n’est stocké sur un serveur, et
+quiconque a le lien peut voir la page (public, mais non référencé). Les liens
+exigent que l’application soit publiée (voir « Déployer sur GitHub Pages »).
 
 ---
 
@@ -119,6 +139,7 @@ pwa/
     seed.js        22 exercices de démonstration
     plans.js       plans de pratique
     exporter.js    PNG / SVG / JSON / impression / lien de partage
+    coach.js       version coachs : liens et page en lecture seule
     qr.js          générateur de code QR autonome (mode octet, niveau L, v1–10)
     store.js       IndexedDB avec repli localStorage
     taxonomy.js    âges, habiletés, situations, espaces, difficultés, couleurs

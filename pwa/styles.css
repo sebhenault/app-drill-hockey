@@ -770,3 +770,31 @@ body:has(.editor) #toasts { bottom: calc(104px + env(safe-area-inset-bottom)); }
   .ed-bottom .player-bar .timeline { min-width: 70px; flex: 1 1 70px; }
   .ed-bottom .ed-seq { flex: 1 1 auto; border-left: 1px solid var(--line-soft); }
 }
+
+/* ==========================================================================
+   Version coachs : page reçue par lien, sans la navigation de l'application
+   ========================================================================== */
+body[data-mode="coach"] .tabbar,
+body[data-mode="coach"] .nav-desk,
+body[data-mode="coach"] .topbar .btn-primary { display: none; }
+.coach { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+.coach-head h1 { margin: 0 0 6px; }
+.coach-order { list-style: none; margin: 0; padding: 6px 12px; }
+.coach-order li { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line-soft); }
+.coach-order li:last-child { border-bottom: 0; }
+.co-clock { font-variant-numeric: tabular-nums; color: var(--tx-2); min-width: 2.6em; font-size: .9em; }
+.co-t { flex: 1; min-width: 0; }
+.co-min { color: var(--tx-2); font-size: .9em; white-space: nowrap; }
+.co-link { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; min-height: 44px;
+  background: none; border: 0; padding: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.co-link .co-t { text-decoration: underline; text-underline-offset: 3px; }
+.co-num { display: inline-grid; place-items: center; width: 24px; height: 24px; flex: 0 0 auto;
+  border-radius: 50%; background: var(--acc); color: #fff; font-size: .8em; font-weight: 700; }
+.co-num.big { width: 34px; height: 34px; font-size: 1em; }
+.coach-ex { scroll-margin-top: 70px; }
+.coach-ex-head { display: flex; align-items: center; gap: 10px; }
+.coach-ex-head h2 { margin: 0; }
+.coach-points { margin: 4px 0 0; padding-left: 1.2em; }
+.coach-points li { margin: 4px 0; }
+.coach-notes p { white-space: pre-line; margin: 0; }
+.coach-foot { text-align: center; }

@@ -18,6 +18,7 @@ import {
   copyPngToClipboard, copyShareLink, shareLink, readShareLink, drillPrintHtml, printHtml,
 } from './exporter.js';
 import { qrSvg } from './qr.js';
+import { viewCoach, videoBlock, drillCoachLink, shareOrCopy } from './coach.js';
 import { viewPlansList, viewPlanEditor, newPlan, planTotal } from './plans.js';
 import { t, setLocale, availableLocales } from './i18n.js';
 import {
@@ -578,28 +579,7 @@ function videoCard(d) {
     box.appendChild(el('p', { class: 'txt-sm txt-2', text: 'Aucune vidéo associée.' }));
     return box;
   }
-  for (const v of d.videos) {
-    const info = parseVideoUrl(v.url);
-    if (info && info.embed) {
-      box.appendChild(el('div', { class: 'embed' }, [el('iframe', {
-        src: info.embed, title: v.title || 'Vidéo', loading: 'lazy',
-        allow: 'accelerometer; clipboard-write; encrypted-media; picture-in-picture',
-        referrerpolicy: 'strict-origin-when-cross-origin', allowfullscreen: true,
-      })]));
-      if (v.title) box.appendChild(el('p', { class: 'txt-sm', style: 'margin:0', text: v.title }));
-    } else {
-      box.appendChild(el('div', { class: 'video-card' }, [
-        el('div', { class: 'vt', html: '<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5l12 7-12 7z"/></svg>' }),
-        el('div', { style: 'flex:1;min-width:0' }, [
-          el('strong', { class: 'txt-sm', text: v.title || 'Vidéo externe' }),
-          el('p', { class: 'txt-sm txt-2', style: 'margin:2px 0', text: v.sourceName || '' }),
-          el('a', { class: 'btn btn-sm', href: safeUrl(v.url), target: '_blank', rel: 'noopener noreferrer',
-            text: 'Voir la vidéo sur le site source ↗' }),
-        ]),
-      ]));
-    }
-    if (v.note) box.appendChild(el('p', { class: 'txt-sm txt-2', style: 'margin:0', text: v.note }));
-  }
+  box.appendChild(videoBlock(d.videos));
   return box;
 }
 
@@ -695,6 +675,8 @@ function exportDialog(d, seqIdx = 0) {
       } }, [t('exp.print')]),
       el('button', { class: 'btn', onclick: () => copyShareLink(d) }, [t('exp.link')]),
     ]),
+    el('button', { class: 'btn btn-primary btn-block', onclick: async () => shareOrCopy(await drillCoachLink(d), d.title) },
+      ['Lien pour les coachs (diagramme, vidéo, points clés)']),
     el('p', { class: 'hint', text: 'Le lien de partage contient l’exercice complet : il fonctionne sans serveur, mais reste long. Pour un envoi par courriel, préfère le fichier JSON.' }),
   ]);
   async function updateQr() {
@@ -1173,6 +1155,9 @@ async function rerender() {
   closeModal();
   viewport.innerHTML = '';
   setActiveNav(hash);
+  // Les coachs reçoivent une page épurée, sans la navigation de l'application.
+  if (route === 'coachs') document.body.dataset.mode = 'coach';
+  else delete document.body.dataset.mode;
 
   let node;
   switch (route) {
@@ -1189,6 +1174,7 @@ async function rerender() {
     case 'parametres': node = viewSettings(); break;
     case 'symboles': node = viewSymbols(); break;
     case 'partage': node = await viewShared(parts.slice(1).join('/')); break;
+    case 'coachs': node = await viewCoach(parts.slice(1).join('/')); break;
     default: node = notFound();
   }
   const view = el('div', { class: 'view' }, [node]);
@@ -1201,7 +1187,7 @@ async function rerender() {
 function routeTitle(r) {
   return ({ '': t('nav.home'), bibliotheque: t('nav.library'), drill: t('drill.title'),
     editeur: t('nav.editor'), plans: t('nav.plans'), plan: t('nav.plans'),
-    parametres: t('nav.settings'), symboles: t('set.symbols') })[r] || t('app.name');
+    parametres: t('nav.settings'), symboles: t('set.symbols'), coachs: 'Version coachs' })[r] || t('app.name');
 }
 
 window.addEventListener('hashchange', () => {
