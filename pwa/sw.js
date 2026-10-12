@@ -11,7 +11,7 @@
  * Aucune requête vers un tiers n'est interceptée ni mise en cache.
  */
 
-const VERSION = 'v3';
+const VERSION = 'v4';
 const CACHE = `drillbuilder-${VERSION}`;
 
 const SHELL = [

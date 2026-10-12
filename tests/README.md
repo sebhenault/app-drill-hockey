@@ -32,3 +32,4 @@ dans `tests/captures/` (ou dans `$SHOT_DIR`).
 | `07-themes.mjs` | thème sombre, clair et `data-theme` imposé par le lecteur |
 | `08-version-coachs.mjs` | liens de pratique et d’exercice pour les coachs, affichage mobile, vidéo intégrée et externe, points clés, lien tronqué, bouton du plan |
 | `09-telephone-portrait.mjs` | iPhone : glace verticale en portrait, objet posé sous le doigt, étiquettes à l’endroit, texte agrandi, paysage et ordinateur inchangés |
+| `10-import-lien.mjs` | lien collé (Bibliothèque, Paramètres) ouvert dans l’app, texte invalide refusé, bouton d’enregistrement lisible sur iPhone |
