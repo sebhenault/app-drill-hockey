@@ -31,3 +31,4 @@ dans `tests/captures/` (ou dans `$SHOT_DIR`).
 | `06-mono-fichier.mjs` | build autonome : démarrage en `file://`, aucune requête externe, persistance |
 | `07-themes.mjs` | thème sombre, clair et `data-theme` imposé par le lecteur |
 | `08-version-coachs.mjs` | liens de pratique et d’exercice pour les coachs, affichage mobile, vidéo intégrée et externe, points clés, lien tronqué, bouton du plan |
+| `09-telephone-portrait.mjs` | iPhone : glace verticale en portrait, objet posé sous le doigt, étiquettes à l’endroit, texte agrandi, paysage et ordinateur inchangés |

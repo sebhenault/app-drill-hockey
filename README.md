@@ -70,6 +70,10 @@ Puis ouvrir <http://127.0.0.1:8099/>.
 3. Bouton **Partager** → **Sur l’écran d’accueil**. L’application s’ouvre ensuite
    en plein écran, sans barre d’adresse.
 
+En portrait, l’éditeur pivote la glace à la verticale pour qu’elle remplisse
+l’écran ; en paysage elle reste à plat. Les données ne changent pas : seul
+l’affichage pivote, et les étiquettes restent à l’endroit.
+
 Points à vérifier : barre d’outils en bas, tiroir coulissant (Joueurs / Lignes /
 Équipement / Texte / Propriétés), pincement pour zoomer, rotation en paysage,
 zones tactiles d’au moins 44 × 44 px.

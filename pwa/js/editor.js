@@ -15,7 +15,7 @@
 import { SURFACES, surfaceViewBox, GRID_STEP, snap } from './rink.js';
 import {
   OBJECTS, PATH_STYLES, PATH_STYLE_IDS, CAPS, CAP_IDS,
-  objectIcon, pathIcon, capIcon, drawPath, bbox, hitTest, densify, cumulative, sampleAt,
+  objectIcon, pathIcon, capIcon, drawPath, bbox, hitTest, densify, cumulative, sampleAt, setTextTurn,
 } from './symbols.js';
 import { sceneMarkup } from './render.js';
 import { COLORS } from './taxonomy.js';
@@ -41,6 +41,7 @@ export function createEditor(opts) {
     sel: new Set(),
     zoom: 1,
     pan: { x: 0, y: 0 },
+    turned: false,            // glace pivotée d'un quart de tour (téléphone en portrait)
     grid: opts.grid || false,
     snap: opts.snap !== false,
     dirty: false,
@@ -314,12 +315,37 @@ export function createEditor(opts) {
     const cx = vb[0] + vb[2] / 2 + S.pan.x, cy = vb[1] + vb[3] / 2 + S.pan.y;
     return [cx - w / 2, cy - h / 2, w, h];
   }
+  /**
+   * Glace pivotée : le contenu est dessiné dans <g transform="rotate(90)">,
+   * qui envoie le point (x, y) de la glace en (-y, x) à l'écran. Les données
+   * restent en coordonnées de glace ; seuls l'affichage et la conversion des
+   * touchers changent.
+   */
+  function displayBox(vb) {
+    return S.turned ? [-(vb[1] + vb[3]), vb[0], vb[3], vb[2]] : vb;
+  }
   function toIce(evt) {
     const r = svg.getBoundingClientRect();
-    const vb = viewBox();
-    const x = vb[0] + ((evt.clientX - r.left) / r.width) * vb[2];
-    const y = vb[1] + ((evt.clientY - r.top) / r.height) * vb[3];
-    return { x, y };
+    const vb = displayBox(viewBox());
+    const X = vb[0] + ((evt.clientX - r.left) / r.width) * vb[2];
+    const Y = vb[1] + ((evt.clientY - r.top) / r.height) * vb[3];
+    return S.turned ? { x: Y, y: -X } : { x: X, y: Y };
+  }
+  /**
+   * Pivoter seulement sur un écran étroit, et seulement si la glace y gagne
+   * nettement en surface : une glace complète en portrait, oui ; une zone
+   * presque carrée, non.
+   */
+  function wantTurn() {
+    if (window.innerWidth > 860) return false;
+    const base = surfaceViewBox(S.drill.surface);
+    const ratio = base[2] / base[3];
+    const r = stage.getBoundingClientRect();
+    const W = r.width - 10, H = r.height - 10;
+    if (W <= 0 || H <= 0) return false;
+    const flat = Math.min(W, H * ratio);          // largeur affichée à plat
+    const turned = Math.min(H, W * ratio);        // hauteur affichée pivotée
+    return turned > flat * 1.07;
   }
   function fit() { S.zoom = 1; S.pan = { x: 0, y: 0 }; updateViewBox(); }
   function setZoom(z) { S.zoom = clamp(z, 0.5, 6); updateViewBox(); zoomLbl.textContent = Math.round(S.zoom * 100) + ' %'; }
@@ -332,11 +358,14 @@ export function createEditor(opts) {
    * On calcule donc la boîte qui tient dans l'estrade, en respectant le ratio.
    */
   function updateViewBox() {
-    const vb = viewBox();
+    const turn = wantTurn();
+    if (turn !== S.turned) { S.turned = turn; render(); return; }
+    root.classList.toggle('is-turned', S.turned);
+    const vb = displayBox(viewBox());
     svg.setAttribute('viewBox', vb.join(' '));
     svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     const base = surfaceViewBox(S.drill.surface);
-    const ratio = base[2] / base[3];
+    const ratio = S.turned ? base[3] / base[2] : base[2] / base[3];
     const r = stage.getBoundingClientRect();
     const availW = Math.max(80, r.width - 10);
     const availH = Math.max(80, r.height - 10);
@@ -406,9 +435,11 @@ export function createEditor(opts) {
 
   function render() {
     const grid = S.grid;
+    setTextTurn(S.turned ? 90 : 0);
     const html = sceneMarkup({ surface: S.drill.surface, elements: els(), grid })
       + draftMarkup() + selectionOverlay();
-    svg.innerHTML = html;
+    setTextTurn(0);
+    svg.innerHTML = S.turned ? `<g transform="rotate(90)">${html}</g>` : html;
     updateViewBox();
     renderSeqBar();
     timeLbl.textContent = fmtSec(S.playT) + ' / ' + fmtSec(totalDuration());
@@ -1004,7 +1035,10 @@ export function createEditor(opts) {
     }
     const movedIds = new Set(moved.map((m) => m.id));
     const elements = source.filter((e2) => !movedIds.has(e2.id)).concat(moved);
-    svg.innerHTML = sceneMarkup({ surface: S.drill.surface, elements, grid: S.grid, reveal });
+    setTextTurn(S.turned ? 90 : 0);
+    const html = sceneMarkup({ surface: S.drill.surface, elements, grid: S.grid, reveal });
+    setTextTurn(0);
+    svg.innerHTML = S.turned ? `<g transform="rotate(90)">${html}</g>` : html;
     updateViewBox();
     timeline.value = String(Math.round((S.playT / (totalDuration() || 1)) * 1000));
     timeLbl.textContent = fmtSec(S.playT) + ' / ' + fmtSec(totalDuration());

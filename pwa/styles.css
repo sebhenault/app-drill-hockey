@@ -798,3 +798,49 @@ body[data-mode="coach"] .topbar .btn-primary { display: none; }
 .coach-points li { margin: 4px 0; }
 .coach-notes p { white-space: pre-line; margin: 0; }
 .coach-foot { text-align: center; }
+
+/* ==========================================================================
+   Téléphone : glace pivotée, texte et boutons plus grands
+   ========================================================================== */
+/* La glace remplit déjà l'écran en portrait : l'invitation à tourner l'appareil
+   n'a plus lieu d'être. */
+.editor.is-turned .rotate-hint { display: none; }
+
+@media (max-width: 860px) and (pointer: coarse) {
+  /* Base de 17 px au lieu de 16, sauf si l'utilisateur a choisi une taille. */
+  html:not([data-textsize="l"]):not([data-textsize="xl"]) { --fs-base: 17px; }
+  .btn-sm { min-height: 42px; padding: 0 12px; }
+  .tabbar button { font-size: .72rem; }
+  .badge { font-size: .8rem; }
+  .hint { font-size: .84rem; }
+  .drill-body .sum { font-size: .9rem; }
+  /* iOS agrandit la page dès qu'un champ de moins de 16 px reçoit le focus. */
+  .inp, select, textarea, input { font-size: max(16px, .95rem); }
+}
+/* En paysage, l'éditeur garde ses barres compactes : la hauteur manque. */
+@media (max-width: 860px) and (pointer: coarse) and (orientation: portrait) {
+  /* Chaque pixel de hauteur va à la glace : l'éditeur a son propre bouton
+     Retour, l'en-tête de l'application est donc superflu. */
+  body:has(.editor) .topbar { display: none; }
+  /* La glace pivote pour remplir le portrait : l'invitation à tourner
+     l'appareil devient inutile. */
+  .rotate-hint { display: none; }
+  /* Lecture et séquences partagent une rangée. La ligne du temps et la vitesse
+     restent offertes en paysage ; en portrait, lecture et retour au début
+     suffisent pour vérifier l'animation. */
+  .ed-bottom { flex-direction: row; align-items: stretch; }
+  .ed-bottom .player-bar { flex: 0 0 auto; flex-wrap: nowrap; gap: 6px; padding: 4px 8px; }
+  .player-bar .timeline, .player-bar .tl-time, .player-bar select { display: none; }
+  .ed-bottom .ed-seq { flex: 1 1 auto; min-width: 0; border-left: 1px solid var(--line-soft); }
+  /* Le pincement zoome déjà : seul « Ajuster » reste, pour ne pas couvrir la glace. */
+  .zoom-ctl > :not(:last-child) { display: none; }
+  .ed-mobile-bar .tool { min-width: 60px; height: 56px; }
+  .tool .tl { font-size: .66rem; }
+  .player-bar .btn { min-height: 44px; min-width: 44px; }
+  .player-bar select { min-height: 40px; height: 40px; }
+  .tl-time { font-size: .76rem; }
+  .seq-item { min-height: 42px; font-size: .9rem; }
+  .zoom-ctl .btn { min-height: 44px; width: 44px; }
+  .ed-top .btn { min-height: 44px; }
+  .ed-title { height: 42px; font-size: 1rem; }
+}
